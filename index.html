@@ -1,539 +1,1253 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ZIT (z-image-turbo) Comprehensive Prompting Guide</title>
+<html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZIT Comprehensive Prompting Guide v2</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Segoe UI', -apple-system, sans-serif; background: #0a0a0a; color: #e0e0e0; line-height: 1.6; }
-.container { max-width: 1400px; margin: 0 auto; padding: 20px; }
-h1 { font-size: 2.5em; text-align: center; padding: 40px 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-h2 { font-size: 1.8em; margin: 40px 0 10px; padding: 15px 20px; background: #1a1a2e; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; }
-h3 { font-size: 1.3em; margin: 25px 0 10px; color: #a0a0ff; }
-.subtitle { text-align: center; color: #888; margin-bottom: 40px; font-size: 1.1em; }
-.specs { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0 30px; }
-.spec-card { background: #16213e; padding: 15px; border-radius: 8px; text-align: center; }
-.spec-card .label { color: #888; font-size: 0.85em; }
-.spec-card .value { color: #667eea; font-size: 1.2em; font-weight: bold; margin-top: 5px; }
-.section-desc { color: #bbb; margin: 10px 0 20px; padding: 0 5px; }
-.grid { display: grid; gap: 15px; margin: 15px 0 30px; }
-.grid-2 { grid-template-columns: repeat(2, 1fr); }
-.grid-3 { grid-template-columns: repeat(3, 1fr); }
-.grid-4 { grid-template-columns: repeat(4, 1fr); }
-.grid-6 { grid-template-columns: repeat(6, 1fr); }
-.card { background: #16213e; border-radius: 10px; overflow: hidden; transition: transform 0.2s; }
-.card:hover { transform: scale(1.02); }
-.card img { width: 100%; display: block; }
-.card .info { padding: 10px 12px; }
-.card .name { font-weight: bold; color: #fff; font-size: 0.95em; }
-.card .desc { color: #999; font-size: 0.8em; margin-top: 4px; }
-.card .rating { color: #ffd700; margin-top: 4px; font-size: 0.85em; }
-.wide-card { grid-column: span 2; }
-.tip-box { background: #1a2744; border: 1px solid #2a4a7a; border-radius: 8px; padding: 15px 20px; margin: 15px 0; }
-.tip-box .tip-title { color: #64b5f6; font-weight: bold; margin-bottom: 8px; }
-.tip-box ul { padding-left: 20px; }
-.tip-box li { margin: 5px 0; color: #ccc; }
-.comparison { display: flex; gap: 2px; margin: 15px 0; overflow-x: auto; }
-.comparison img { height: 200px; flex-shrink: 0; border-radius: 4px; }
-.table-wrap { overflow-x: auto; margin: 15px 0; }
-table { width: 100%; border-collapse: collapse; background: #16213e; border-radius: 8px; overflow: hidden; }
-th { background: #1a2744; padding: 10px 15px; text-align: left; color: #a0a0ff; font-size: 0.9em; }
-td { padding: 10px 15px; border-top: 1px solid #2a2a4a; font-size: 0.9em; }
-.star { color: #ffd700; }
-.tag { display: inline-block; background: #2a4a7a; color: #8ab4f8; padding: 2px 8px; border-radius: 12px; font-size: 0.75em; margin: 2px; }
-.tag.green { background: #1a4a2a; color: #81c784; }
-.tag.orange { background: #4a3a1a; color: #ffb74d; }
-.tag.red { background: #4a1a1a; color: #e57373; }
-.summary-box { background: linear-gradient(135deg, #1a2744, #16213e); border: 1px solid #3a5a9a; border-radius: 12px; padding: 25px; margin: 30px 0; }
-.prompt-example { background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 12px 16px; margin: 10px 0; font-family: monospace; font-size: 0.9em; color: #c9d1d9; white-space: pre-wrap; }
-footer { text-align: center; padding: 40px 0; color: #555; border-top: 1px solid #222; margin-top: 40px; }
-@media (max-width: 900px) { .grid-4 { grid-template-columns: repeat(2, 1fr); } .grid-3 { grid-template-columns: repeat(2, 1fr); } .grid-6 { grid-template-columns: repeat(3, 1fr); } }
-</style>
-</head>
-<body>
-<div class="container">
-
-<h1>ZIT Comprehensive Prompting Guide</h1>
-<p class="subtitle">z-image-turbo (bf16) + Qwen3-4B | 254 Tests | 2026-03-30</p>
-
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',-apple-system,sans-serif;background:#0a0a0a;color:#e0e0e0;line-height:1.7;scroll-behavior:smooth}
+.container{max-width:1400px;margin:0 auto;padding:20px}
+nav{position:sticky;top:0;z-index:100;background:rgba(10,10,10,0.95);backdrop-filter:blur(10px);border-bottom:1px solid #222;padding:10px 0}
+nav .ni{max-width:1400px;margin:0 auto;padding:0 20px;display:flex;gap:5px;overflow-x:auto;scrollbar-width:thin}
+nav a{color:#888;text-decoration:none;padding:6px 14px;border-radius:20px;font-size:0.82em;white-space:nowrap;transition:all 0.2s}
+nav a:hover{background:#1a2744;color:#8ab4f8}
+.hero{text-align:center;padding:50px 0 30px}
+.hero h1{font-size:2.8em;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero .sub{color:#888;margin-top:10px;font-size:1.1em}
+.specs{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin:25px 0}
+.sp{background:#16213e;padding:8px 18px;border-radius:20px;font-size:0.85em}
+.sp b{color:#8ab4f8}
+section{padding:30px 0;border-top:1px solid #1a1a2e}
+section h2{font-size:1.8em;margin-bottom:8px}
+.sd{color:#bbb;font-size:0.95em;margin-bottom:15px}
+.tip{background:#111d2e;border-left:3px solid #4a8af4;border-radius:0 8px 8px 0;padding:14px 18px;margin:15px 0}
+.tip b{color:#4a8af4}
+.tip p{font-size:0.88em;color:#bbb}
+.grid{display:grid;gap:16px;margin:20px 0}
+.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+.card{background:#12192b;border-radius:10px;overflow:hidden;transition:transform 0.2s}
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 25px rgba(0,0,0,0.4)}
+.card img{width:100%;display:block}
+.card .info{padding:12px 14px}
+.card .nm{font-weight:bold;color:#fff;font-size:0.95em;margin-bottom:4px}
+.card .pr{font-family:monospace;font-size:0.72em;color:#7a8a9a;background:#0d1117;padding:8px;border-radius:6px;margin:6px 0;max-height:80px;overflow-y:auto;word-break:break-all;line-height:1.4}
+.card .cm{font-size:0.8em;margin-top:6px}
+.card .cm .it{color:#64b5f6}.card .cm .rs{color:#81c784}
+.card .rt{color:#ffd700;font-size:0.85em;margin-top:4px}
+.tg{display:inline-block;padding:2px 8px;border-radius:10px;font-size:0.72em;margin:2px}
+.tg-b{background:#1a2a4a;color:#64b5f6}
+.summary{background:linear-gradient(135deg,#111d2e,#0d1520);border:1px solid #2a4a7a;border-radius:12px;padding:25px;margin:30px 0}
+.formula{background:#0a0f18;border:1px solid #1a2a4a;border-radius:8px;padding:15px;font-family:monospace;font-size:0.9em;color:#c9d1d9;margin:10px 0;white-space:pre-wrap}
+footer{text-align:center;padding:40px 0;color:#555;font-size:0.85em}
+@media(max-width:1000px){.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.g3,.g4{grid-template-columns:1fr}}
+</style></head><body>
+<nav><div class="ni">
+<a href="#styles">🎨 Art Style Baseline</a>
+<a href="#structure">📝 Prompt Structure</a>
+<a href="#costumes">👗 Costume & Genre</a>
+<a href="#camera">📷 Camera & Depth of Field</a>
+<a href="#lighting">💡 Lighting</a>
+<a href="#expressions">😊 Expression & Emotion</a>
+<a href="#poses">🏃 Pose & Action</a>
+<a href="#environments">🏔️ Environment</a>
+<a href="#ratios">📐 Aspect Ratios</a>
+<a href="#eclipsia-jrpg">⚔️ Eclipsia: JRPG Style</a>
+<a href="#eclipsia-concept">🎯 Eclipsia: Concept Art</a>
+<a href="#summary">📋 Summary</a>
+</div></nav><div class="container">
+<div class="hero"><h1>ZIT Comprehensive Prompting Guide</h1>
+<p class="sub">z-image-turbo (bf16) + Qwen3-4B | 312 Images | 2026-03-30</p>
 <div class="specs">
-  <div class="spec-card"><div class="label">Model</div><div class="value">z-image-turbo bf16</div></div>
-  <div class="spec-card"><div class="label">Text Encoder</div><div class="value">Qwen3-4B</div></div>
-  <div class="spec-card"><div class="label">CFG</div><div class="value">1</div></div>
-  <div class="spec-card"><div class="label">Steps</div><div class="value">8</div></div>
-  <div class="spec-card"><div class="label">Sampler</div><div class="value">euler + beta</div></div>
-  <div class="spec-card"><div class="label">GPU</div><div class="value">RTX 5060 Ti 16GB</div></div>
-  <div class="spec-card"><div class="label">Avg Time</div><div class="value">~24s / image</div></div>
-  <div class="spec-card"><div class="label">Total Tests</div><div class="value">254</div></div>
-</div>
-
-<!-- ============================================ -->
-<!-- PHASE 1: ART STYLES -->
-<!-- ============================================ -->
-<h2>1. Art Style Baseline (12 Styles)</h2>
-<p class="section-desc">동일 캐릭터("빨간 숏컷 + 녹색 눈 + 가죽 재킷")를 12가지 아트 스타일로 생성. 스타일을 프롬프트 맨 앞에 배치하는 "미디엄 퍼스트" 패턴 사용.</p>
-
-<div class="grid grid-4">
-  <div class="card"><img src="images/img_001.png"><div class="info"><div class="name">Photorealistic</div><div class="desc">"Professional DSLR photograph of..."</div><div class="rating"><span class="star">★★★★★</span> 완벽한 피부 질감, 주근깨</div></div></div>
-  <div class="card"><img src="images/img_002.png"><div class="info"><div class="name">Cinematic</div><div class="desc">"35mm cinematic film still of..."</div><div class="rating"><span class="star">★★★★★</span> 무디한 조명, 렌즈 플레어</div></div></div>
-  <div class="card"><img src="images/img_003.png"><div class="info"><div class="name">Digital Illustration</div><div class="desc">"Digital illustration of..."</div><div class="rating"><span class="star">★★★★★</span> 깨끗한 라인, 밝은 색감</div></div></div>
-  <div class="card"><img src="images/img_004.png"><div class="info"><div class="name">Oil Painting</div><div class="desc">"Oil painting on canvas of..."</div><div class="rating"><span class="star">★★★★★</span> 캔버스 텍스처, 임파스토</div></div></div>
-  <div class="card"><img src="images/img_005.png"><div class="info"><div class="name">Watercolor</div><div class="desc">"Watercolor painting of..."</div><div class="rating"><span class="star">★★★★★</span> 번지는 물감, 종이 질감</div></div></div>
-  <div class="card"><img src="images/img_006.png"><div class="info"><div class="name">Anime Cel-shaded</div><div class="desc">"Cel-shaded anime illustration of..."</div><div class="rating"><span class="star">★★★★★</span> 셀셰이딩, 큰 눈</div></div></div>
-  <div class="card"><img src="images/img_007.png"><div class="info"><div class="name">Manga B&W</div><div class="desc">"Black and white manga ink drawing of..."</div><div class="rating"><span class="star">★★★★</span> 눈 색상 약간 남음</div></div></div>
-  <div class="card"><img src="images/img_008.png"><div class="info"><div class="name">Western Comic</div><div class="desc">"Comic book art of..."</div><div class="rating"><span class="star">★★★★★</span> 볼드 잉크, 하프톤</div></div></div>
-  <div class="card"><img src="images/img_009.png"><div class="info"><div class="name">3D Render (Pixar)</div><div class="desc">"Pixar-style 3D render of..."</div><div class="rating"><span class="star">★★★★★</span> SSS 피부, 스타일라이즈</div></div></div>
-  <div class="card"><img src="images/img_010.png"><div class="info"><div class="name">Pixel Art</div><div class="desc">"16-bit pixel art sprite of..."</div><div class="rating"><span class="star">★★★★</span> 고해상도 픽셀 느낌</div></div></div>
-  <div class="card"><img src="images/img_011.png"><div class="info"><div class="name">Chibi</div><div class="desc">"Chibi style illustration of..."</div><div class="rating"><span class="star">★★★★★</span> 큰 머리, 작은 몸</div></div></div>
-  <div class="card"><img src="images/img_012.png"><div class="info"><div class="name">Flat Vector</div><div class="desc">"Flat vector illustration of..."</div><div class="rating"><span class="star">★★★★★</span> 미니멀 기하학</div></div></div>
-</div>
-
-<div class="tip-box">
-  <div class="tip-title">Style Prompting Tips</div>
-  <ul>
-    <li><strong>스타일을 맨 앞에</strong> — "Watercolor painting of..." 형태가 가장 안정적</li>
-    <li><strong>자연어 문장형</strong> — Qwen3는 태그 나열보다 문장형에 더 잘 반응</li>
-    <li><strong>Tier 1 스타일</strong>(사진, 디지털아트, 3D, 애니메, 유화)은 키워드만으로 충분</li>
-    <li><strong>Tier 3 스타일</strong>(과슈 등)은 반드시 스타일명 포함 필요</li>
-  </ul>
-</div>
-
-<!-- ============================================ -->
-<!-- PROMPT STRUCTURE -->
-<!-- ============================================ -->
-<h2>2. Prompt Structure Comparison</h2>
-<p class="section-desc">동일 스타일을 4가지 프롬프트 패턴으로 비교. 수채화(Tier 2)와 과슈(Tier 3)에서 차이가 극명하게 드러남.</p>
-
-<h3>Watercolor: 4 Patterns</h3>
-<div class="grid grid-4">
-  <div class="card"><img src="images/img_013.png"><div class="info"><div class="name">A. Medium First</div><div class="desc">"Watercolor painting of [캐릭터]..."</div><div class="rating"><span class="star">★★★★★</span> <span class="tag green">추천</span></div></div></div>
-  <div class="card"><img src="images/img_014.png"><div class="info"><div class="name">B. Subject First</div><div class="desc">"[캐릭터], painted in watercolor..."</div><div class="rating"><span class="star">★★★★★</span></div></div></div>
-  <div class="card"><img src="images/img_015.png"><div class="info"><div class="name">C. Descriptive Only</div><div class="desc">"[캐릭터], loose brushstrokes..."</div><div class="rating"><span class="star">★★★★</span> <span class="tag orange">스타일 shift</span></div></div></div>
-  <div class="card"><img src="images/img_016.png"><div class="info"><div class="name">D. Artist Reference</div><div class="desc">"In the style of Agnes Cecile..."</div><div class="rating"><span class="star">★★★★★</span> <span class="tag">감성적</span></div></div></div>
-</div>
-
-<h3>Gouache: 4 Patterns (Tier 3 — 차이 극명)</h3>
-<div class="grid grid-4">
-  <div class="card"><img src="images/img_017.png"><div class="info"><div class="name">A. Medium First</div><div class="desc">"Gouache painting of..."</div><div class="rating"><span class="star">★★★★★</span> <span class="tag green">정확</span></div></div></div>
-  <div class="card"><img src="images/img_018.png"><div class="info"><div class="name">B. Subject First</div><div class="desc">"[캐릭터], rendered in gouache..."</div><div class="rating"><span class="star">★★★★</span> <span class="tag orange">약간 감소</span></div></div></div>
-  <div class="card"><img src="images/img_019.png"><div class="info"><div class="name">C. Descriptive Only</div><div class="desc">"opaque matte, flat brush marks..."</div><div class="rating"><span class="star">★★</span> <span class="tag red">실패 — 사진화</span></div></div></div>
-  <div class="card"><img src="images/img_020.png"><div class="info"><div class="name">D. Artist Reference</div><div class="desc">"In the style of Sachin Teng..."</div><div class="rating"><span class="star">★★★★</span> <span class="tag orange">벡터로 shift</span></div></div></div>
-</div>
-
-<div class="tip-box">
-  <div class="tip-title">Recommended Prompt Template</div>
-  <div class="prompt-example">[Medium/Style] of [Character 7~30 words], [Expression/Pose], [Clothing], [Environment/Lighting], [Color/Mood]</div>
-</div>
-
-<!-- ============================================ -->
-<!-- COSTUMES -->
-<!-- ============================================ -->
-<h2>3. Costume & Genre (30 Styles)</h2>
-<p class="section-desc">동일 캐릭터에 의상만 변경. 역사/판타지/현대/전통/서브컬처 5개 카테고리. 전신 3:4 비율.</p>
-
-<h3>A. Historical (역사/시대별)</h3>
-<div class="grid grid-6">
-  <div class="card"><img src="images/img_021.png"><div class="info"><div class="name">Ancient Egyptian</div></div></div>
-  <div class="card"><img src="images/img_022.png"><div class="info"><div class="name">Medieval Knight</div></div></div>
-  <div class="card"><img src="images/img_023.png"><div class="info"><div class="name">Renaissance Noble</div></div></div>
-  <div class="card"><img src="images/img_024.png"><div class="info"><div class="name">Edo Samurai</div></div></div>
-  <div class="card"><img src="images/img_025.png"><div class="info"><div class="name">Victorian Lady</div></div></div>
-  <div class="card"><img src="images/img_026.png"><div class="info"><div class="name">1920s Flapper</div></div></div>
-</div>
-
-<h3>B. Fantasy / Sci-Fi</h3>
-<div class="grid grid-6">
-  <div class="card"><img src="images/img_027.png"><div class="info"><div class="name">High Fantasy Mage</div></div></div>
-  <div class="card"><img src="images/img_028.png"><div class="info"><div class="name">Dark Assassin</div></div></div>
-  <div class="card"><img src="images/img_029.png"><div class="info"><div class="name">Cyberpunk Hacker</div></div></div>
-  <div class="card"><img src="images/img_030.png"><div class="info"><div class="name">Space Marine</div></div></div>
-  <div class="card"><img src="images/img_031.png"><div class="info"><div class="name">Steampunk</div></div></div>
-  <div class="card"><img src="images/img_032.png"><div class="info"><div name="name">Pirate Captain</div></div></div>
-</div>
-
-<h3>C. Modern Uniforms</h3>
-<div class="grid grid-6">
-  <div class="card"><img src="images/img_033.png"><div class="info"><div class="name">Business Suit</div></div></div>
-  <div class="card"><img src="images/img_034.png"><div class="info"><div class="name">Chef</div></div></div>
-  <div class="card"><img src="images/img_035.png"><div class="info"><div class="name">Firefighter</div></div></div>
-  <div class="card"><img src="images/img_036.png"><div class="info"><div class="name">Doctor</div></div></div>
-  <div class="card"><img src="images/img_037.png"><div class="info"><div class="name">Military</div></div></div>
-  <div class="card"><img src="images/img_038.png"><div class="info"><div class="name">Astronaut</div></div></div>
-</div>
-
-<h3>D. Cultural / Traditional</h3>
-<div class="grid grid-6">
-  <div class="card"><img src="images/img_039.png"><div class="info"><div class="name">Korean Hanbok</div></div></div>
-  <div class="card"><img src="images/img_040.png"><div class="info"><div class="name">Japanese Kimono</div></div></div>
-  <div class="card"><img src="images/img_041.png"><div class="info"><div class="name">Indian Sari</div></div></div>
-  <div class="card"><img src="images/img_042.png"><div class="info"><div class="name">Scottish Kilt</div></div></div>
-  <div class="card"><img src="images/img_043.png"><div class="info"><div class="name">Arabian</div></div></div>
-  <div class="card"><img src="images/img_044.png"><div class="info"><div class="name">Chinese Hanfu</div></div></div>
-</div>
-
-<h3>E. Subculture / Fashion</h3>
-<div class="grid grid-6">
-  <div class="card"><img src="images/img_045.png"><div class="info"><div class="name">Gothic Lolita</div></div></div>
-  <div class="card"><img src="images/img_046.png"><div class="info"><div class="name">Streetwear</div></div></div>
-  <div class="card"><img src="images/img_047.png"><div class="info"><div class="name">Punk Rock</div></div></div>
-  <div class="card"><img src="images/img_048.png"><div class="info"><div class="name">Ballerina</div></div></div>
-  <div class="card"><img src="images/img_049.png"><div class="info"><div class="name">Athletic</div></div></div>
-  <div class="card"><img src="images/img_050.png"><div class="info"><div class="name">Wedding Dress</div></div></div>
-</div>
-
-<!-- ============================================ -->
-<!-- CAMERA -->
-<!-- ============================================ -->
-<h2>4. Camera & Depth of Field</h2>
-
-<h3>Shot Size Spectrum</h3>
-<p class="section-desc">Extreme Close-up → Close-up → Medium Close-up → Medium → Medium Full → Full → Wide → Extreme Wide</p>
-<div class="grid grid-4">
-  <div class="card"><img src="images/img_051.png"><div class="info"><div class="name">Extreme Close-up</div><div class="desc">눈코만 보이는 극접사</div></div></div>
-  <div class="card"><img src="images/img_052.png"><div class="info"><div class="name">Close-up</div><div class="desc">머리+어깨</div></div></div>
-  <div class="card"><img src="images/img_053.png"><div class="info"><div class="name">Medium Close-up</div><div class="desc">가슴 위</div></div></div>
-  <div class="card"><img src="images/img_054.png"><div class="info"><div class="name">Medium Shot</div><div class="desc">허리 위</div></div></div>
-  <div class="card"><img src="images/img_055.png"><div class="info"><div class="name">Medium Full</div><div class="desc">무릎 위</div></div></div>
-  <div class="card"><img src="images/img_056.png"><div class="info"><div class="name">Full Shot</div><div class="desc">전신</div></div></div>
-  <div class="card"><img src="images/img_057.png"><div class="info"><div class="name">Wide Shot</div><div class="desc">환경 속 인물</div></div></div>
-  <div class="card"><img src="images/img_058.png"><div class="info"><div class="name">Extreme Wide</div><div class="desc">도시 전경 속 작은 인물</div></div></div>
-</div>
-
-<h3>Camera Angles</h3>
-<div class="grid grid-4">
-  <div class="card"><img src="images/img_059.png"><div class="info"><div class="name">Eye Level</div></div></div>
-  <div class="card"><img src="images/img_060.png"><div class="info"><div class="name">Low Angle</div></div></div>
-  <div class="card"><img src="images/img_061.png"><div class="info"><div class="name">High Angle</div></div></div>
-  <div class="card"><img src="images/img_062.png"><div class="info"><div class="name">Bird's Eye</div></div></div>
-  <div class="card"><img src="images/img_063.png"><div class="info"><div class="name">Worm's Eye</div></div></div>
-  <div class="card"><img src="images/img_064.png"><div class="info"><div class="name">Dutch Angle</div></div></div>
-  <div class="card"><img src="images/img_065.png"><div class="info"><div class="name">Over the Shoulder</div></div></div>
-  <div class="card"><img src="images/img_066.png"><div class="info"><div class="name">Profile View</div></div></div>
-</div>
-
-<h3>Depth of Field</h3>
-<div class="grid grid-4">
-  <div class="card"><img src="images/img_067.png"><div class="info"><div class="name">Deep DOF (f/16)</div><div class="desc">전부 선명</div></div></div>
-  <div class="card"><img src="images/img_068.png"><div class="info"><div class="name">Moderate (f/5.6)</div><div class="desc">배경 약간 흐림</div></div></div>
-  <div class="card"><img src="images/img_069.png"><div class="info"><div class="name">Shallow (f/2.8)</div><div class="desc">배경 보케</div></div></div>
-  <div class="card"><img src="images/img_070.png"><div class="info"><div class="name">Very Shallow (f/1.4)</div><div class="desc">눈만 초점, 크리미 보케</div></div></div>
-  <div class="card"><img src="images/img_071.png"><div class="info"><div class="name">Foreground Bokeh</div><div class="desc">전경 블러 (가장 효과적!)</div></div></div>
-  <div class="card"><img src="images/img_072.png"><div class="info"><div class="name">Tilt-Shift</div><div class="desc">미니어처 효과</div></div></div>
-  <div class="card"><img src="images/img_073.png"><div class="info"><div class="name">Rack Focus</div><div class="desc">배경에 초점</div></div></div>
-  <div class="card"><img src="images/img_074.png"><div class="info"><div class="name">Bokeh Balls (Night)</div><div class="desc">야간 도시 불빛 보케</div></div></div>
-</div>
-
-<h3>Lens Effects</h3>
-<div class="grid grid-4">
-  <div class="card"><img src="images/img_075.png"><div class="info"><div class="name">Wide 24mm</div></div></div>
-  <div class="card"><img src="images/img_076.png"><div class="info"><div class="name">Standard 50mm</div></div></div>
-  <div class="card"><img src="images/img_077.png"><div class="info"><div class="name">Portrait 85mm</div></div></div>
-  <div class="card"><img src="images/img_078.png"><div class="info"><div class="name">Telephoto 200mm</div></div></div>
-  <div class="card"><img src="images/img_079.png"><div class="info"><div class="name">Fisheye</div></div></div>
-  <div class="card"><img src="images/img_080.png"><div class="info"><div class="name">Macro</div></div></div>
-  <div class="card"><img src="images/img_081.png"><div class="info"><div class="name">Anamorphic</div></div></div>
-  <div class="card"><img src="images/img_082.png"><div class="info"><div class="name">Vintage Helios</div></div></div>
-</div>
-
-<!-- ============================================ -->
-<!-- LIGHTING -->
-<!-- ============================================ -->
-<h2>5. Lighting</h2>
-
-<h3>Light Direction</h3>
-<div class="grid grid-4">
-  <div class="card"><img src="images/img_083.png"><div class="info"><div class="name">Front Light</div></div></div>
-  <div class="card"><img src="images/img_084.png"><div class="info"><div class="name">Rembrandt (Side)</div></div></div>
-  <div class="card"><img src="images/img_085.png"><div class="info"><div class="name">Backlight / Silhouette</div></div></div>
-  <div class="card"><img src="images/img_086.png"><div class="info"><div class="name">Top Light</div></div></div>
-  <div class="card"><img src="images/img_087.png"><div class="info"><div class="name">Under Light (Horror)</div></div></div>
-  <div class="card"><img src="images/img_088.png"><div class="info"><div class="name">Rim Light</div></div></div>
-  <div class="card"><img src="images/img_089.png"><div class="info"><div class="name">Split Light</div></div></div>
-  <div class="card"><img src="images/img_090.png"><div class="info"><div class="name">Butterfly Light</div></div></div>
-</div>
-
-<h3>Natural Light</h3>
-<div class="grid grid-4">
-  <div class="card"><img src="images/img_091.png"><div class="info"><div class="name">Golden Hour</div></div></div>
-  <div class="card"><img src="images/img_092.png"><div class="info"><div class="name">Blue Hour</div></div></div>
-  <div class="card"><img src="images/img_093.png"><div class="info"><div class="name">Harsh Midday Sun</div></div></div>
-  <div class="card"><img src="images/img_094.png"><div class="info"><div class="name">Overcast Soft</div></div></div>
-  <div class="card"><img src="images/img_095.png"><div class="info"><div class="name">Window Light</div></div></div>
-  <div class="card"><img src="images/img_096.png"><div class="info"><div class="name">Dappled Light</div></div></div>
-  <div class="card"><img src="images/img_097.png"><div class="info"><div class="name">Sunrise Backlit</div></div></div>
-  <div class="card"><img src="images/img_098.png"><div class="info"><div class="name">Moonlight</div></div></div>
-</div>
-
-<h3>Artificial Light & Color Temperature</h3>
-<div class="grid grid-4">
-  <div class="card"><img src="images/img_099.png"><div class="info"><div class="name">Tungsten 3200K</div></div></div>
-  <div class="card"><img src="images/img_100.png"><div class="info"><div class="name">Daylight 5600K</div></div></div>
-  <div class="card"><img src="images/img_101.png"><div class="info"><div class="name">Fluorescent</div></div></div>
-  <div class="card"><img src="images/img_102.png"><div class="info"><div class="name">Neon Mix</div></div></div>
-  <div class="card"><img src="images/img_103.png"><div class="info"><div class="name">Red Gel</div></div></div>
-  <div class="card"><img src="images/img_104.png"><div class="info"><div class="name">Blue & Orange</div><div class="rating"><span class="tag green">가장 시네마틱</span></div></div></div>
-  <div class="card"><img src="images/img_105.png"><div class="info"><div class="name">Green Neon</div></div></div>
-  <div class="card"><img src="images/img_106.png"><div class="info"><div class="name">UV Blacklight</div></div></div>
-</div>
-
-<h3>Special Lighting Effects</h3>
-<div class="grid grid-4">
-  <div class="card"><img src="images/img_107.png"><div class="info"><div class="name">Volumetric / God Rays</div></div></div>
-  <div class="card"><img src="images/img_108.png"><div class="info"><div class="name">Candlelight</div></div></div>
-  <div class="card"><img src="images/img_109.png"><div class="info"><div class="name">Fire Light</div></div></div>
-  <div class="card"><img src="images/img_110.png"><div class="info"><div class="name">Screen Glow</div></div></div>
-  <div class="card"><img src="images/img_111.png"><div class="info"><div class="name">Lightning Flash</div></div></div>
-  <div class="card"><img src="images/img_112.png"><div class="info"><div class="name">Water Reflection</div></div></div>
-  <div class="card"><img src="images/img_113.png"><div class="info"><div class="name">Stained Glass</div><div class="rating"><span class="tag green">최고!</span></div></div></div>
-  <div class="card"><img src="images/img_114.png"><div class="info"><div class="name">Spotlight</div></div></div>
-</div>
-
-<!-- ============================================ -->
-<!-- EXPRESSIONS -->
-<!-- ============================================ -->
-<h2>6. Expression & Emotion</h2>
-
-<h3>Basic Emotions (Ekman's 6 + Contempt)</h3>
-<div class="grid grid-4">
-  <div class="card"><img src="images/img_115.png"><div class="info"><div class="name">Neutral</div></div></div>
-  <div class="card"><img src="images/img_116.png"><div class="info"><div class="name">Happy</div></div></div>
-  <div class="card"><img src="images/img_117.png"><div class="info"><div class="name">Sad</div></div></div>
-  <div class="card"><img src="images/img_118.png"><div class="info"><div class="name">Angry</div></div></div>
-  <div class="card"><img src="images/img_119.png"><div class="info"><div class="name">Fearful</div></div></div>
-  <div class="card"><img src="images/img_120.png"><div class="info"><div class="name">Disgusted</div></div></div>
-  <div class="card"><img src="images/img_121.png"><div class="info"><div class="name">Surprised</div></div></div>
-  <div class="card"><img src="images/img_122.png"><div class="info"><div class="name">Contempt</div></div></div>
-</div>
-
-<h3>Subtle / Complex Emotions</h3>
-<div class="grid grid-4">
-  <div class="card"><img src="images/img_123.png"><div class="info"><div class="name">Melancholic</div></div></div>
-  <div class="card"><img src="images/img_124.png"><div class="info"><div class="name">Nostalgic</div></div></div>
-  <div class="card"><img src="images/img_125.png"><div class="info"><div class="name">Determined</div></div></div>
-  <div class="card"><img src="images/img_126.png"><div class="info"><div class="name">Mischievous</div></div></div>
-  <div class="card"><img src="images/img_127.png"><div class="info"><div class="name">Embarrassed</div></div></div>
-  <div class="card"><img src="images/img_128.png"><div class="info"><div class="name">Exhausted</div></div></div>
-  <div class="card"><img src="images/img_129.png"><div class="info"><div class="name">Suspicious</div></div></div>
-  <div class="card"><img src="images/img_130.png"><div class="info"><div class="name">Vulnerable</div></div></div>
-</div>
-
-<h3>Smile Spectrum</h3>
-<div class="grid grid-4">
-  <div class="card"><img src="images/img_131.png"><div class="info"><div class="name">Mona Lisa Smile</div></div></div>
-  <div class="card"><img src="images/img_132.png"><div class="info"><div class="name">Polite Smile</div></div></div>
-  <div class="card"><img src="images/img_133.png"><div class="info"><div class="name">Warm Genuine</div></div></div>
-  <div class="card"><img src="images/img_134.png"><div class="info"><div class="name">Big Grin</div></div></div>
-  <div class="card"><img src="images/img_135.png"><div class="info"><div class="name">Laughing</div></div></div>
-  <div class="card"><img src="images/img_136.png"><div class="info"><div class="name">Smirk / Cocky</div></div></div>
-  <div class="card"><img src="images/img_137.png"><div class="info"><div class="name">Sad Smile</div></div></div>
-  <div class="card"><img src="images/img_138.png"><div class="info"><div class="name">Forced Smile</div></div></div>
-</div>
-
-<h3>Dramatic / Theatrical</h3>
-<div class="grid grid-4">
-  <div class="card"><img src="images/img_139.png"><div class="info"><div class="name">Screaming</div></div></div>
-  <div class="card"><img src="images/img_140.png"><div class="info"><div class="name">Crying</div><div class="rating"><span class="tag green">가장 인상적</span></div></div></div>
-  <div class="card"><img src="images/img_141.png"><div class="info"><div class="name">Maniacal Laugh</div></div></div>
-  <div class="card"><img src="images/img_142.png"><div class="info"><div class="name">Seething Rage</div></div></div>
-  <div class="card"><img src="images/img_143.png"><div class="info"><div class="name">Deep Thought</div></div></div>
-  <div class="card"><img src="images/img_144.png"><div class="info"><div class="name">Winking</div></div></div>
-  <div class="card"><img src="images/img_145.png"><div class="info"><div class="name">Poker Face</div></div></div>
-  <div class="card"><img src="images/img_146.png"><div class="info"><div class="name">Awe / Wonder</div></div></div>
-</div>
-
-<!-- ============================================ -->
-<!-- POSES -->
-<!-- ============================================ -->
-<h2>7. Pose & Action</h2>
-
-<h3>Static Poses</h3>
-<div class="grid grid-4">
-  <div class="card"><img src="images/img_147.png"><div class="info"><div class="name">Standing Straight</div></div></div>
-  <div class="card"><img src="images/img_148.png"><div class="info"><div class="name">Arms Crossed</div></div></div>
-  <div class="card"><img src="images/img_149.png"><div class="info"><div class="name">Hands on Hips</div></div></div>
-  <div class="card"><img src="images/img_150.png"><div class="info"><div class="name">Sitting on Chair</div></div></div>
-  <div class="card"><img src="images/img_151.png"><div class="info"><div class="name">Leaning on Wall</div></div></div>
-  <div class="card"><img src="images/img_152.png"><div class="info"><div class="name">Crouching</div></div></div>
-  <div class="card"><img src="images/img_153.png"><div class="info"><div class="name">Sitting on Floor</div></div></div>
-  <div class="card"><img src="images/img_154.png"><div class="info"><div class="name">Back Turned</div></div></div>
-</div>
-
-<h3>Dynamic Action</h3>
-<div class="grid grid-4">
-  <div class="card"><img src="images/img_155.png"><div class="info"><div class="name">Running</div></div></div>
-  <div class="card"><img src="images/img_156.png"><div class="info"><div class="name">Jumping</div></div></div>
-  <div class="card"><img src="images/img_157.png"><div class="info"><div class="name">Kicking</div></div></div>
-  <div class="card"><img src="images/img_158.png"><div class="info"><div class="name">Punching</div></div></div>
-  <div class="card"><img src="images/img_159.png"><div class="info"><div class="name">Dancing</div></div></div>
-  <div class="card"><img src="images/img_160.png"><div class="info"><div class="name">Falling Backwards</div><div class="rating"><span class="tag green">가장 인상적</span></div></div></div>
-  <div class="card"><img src="images/img_161.png"><div class="info"><div class="name">Spinning</div></div></div>
-  <div class="card"><img src="images/img_162.png"><div class="info"><div class="name">Climbing</div></div></div>
-</div>
-
-<h3>Gestures & Hand Poses</h3>
-<div class="grid grid-4">
-  <div class="card"><img src="images/img_163.png"><div class="info"><div class="name">Peace Sign</div></div></div>
-  <div class="card"><img src="images/img_164.png"><div class="info"><div class="name">Thumbs Up</div></div></div>
-  <div class="card"><img src="images/img_165.png"><div class="info"><div class="name">Pointing</div></div></div>
-  <div class="card"><img src="images/img_166.png"><div class="info"><div class="name">Hand on Chin</div></div></div>
-  <div class="card"><img src="images/img_167.png"><div class="info"><div class="name">Shrug</div></div></div>
-  <div class="card"><img src="images/img_168.png"><div class="info"><div class="name">Wave</div></div></div>
-  <div class="card"><img src="images/img_169.png"><div class="info"><div class="name">Heart Hands</div><div class="rating"><span class="tag green">손가락 완벽!</span></div></div></div>
-  <div class="card"><img src="images/img_170.png"><div class="info"><div class="name">Finger to Lips</div></div></div>
-</div>
-
-<h3>Interaction & Situational</h3>
-<div class="grid grid-4">
-  <div class="card"><img src="images/img_171.png"><div class="info"><div class="name">Reading</div></div></div>
-  <div class="card"><img src="images/img_172.png"><div class="info"><div class="name">Guitar</div></div></div>
-  <div class="card"><img src="images/img_173.png"><div class="info"><div class="name">Taking Photo</div></div></div>
-  <div class="card"><img src="images/img_174.png"><div class="info"><div class="name">Motorcycle</div><div class="rating"><span class="tag green">최고!</span></div></div></div>
-  <div class="card"><img src="images/img_175.png"><div class="info"><div class="name">Umbrella in Rain</div></div></div>
-  <div class="card"><img src="images/img_176.png"><div class="info"><div class="name">Coffee</div></div></div>
-  <div class="card"><img src="images/img_177.png"><div class="info"><div class="name">Laptop</div></div></div>
-  <div class="card"><img src="images/img_178.png"><div class="info"><div class="name">Sword Fighting</div></div></div>
-</div>
-
-<!-- ============================================ -->
-<!-- ENVIRONMENTS -->
-<!-- ============================================ -->
-<h2>8. Environments & Backgrounds</h2>
-
-<h3>Natural</h3>
-<div class="grid grid-4">
-  <div class="card"><img src="images/img_179.png"><div class="info"><div class="name">Dense Forest</div></div></div>
-  <div class="card"><img src="images/img_180.png"><div class="info"><div class="name">Mountain Peak</div></div></div>
-  <div class="card"><img src="images/img_181.png"><div class="info"><div class="name">Beach Sunset</div></div></div>
-  <div class="card"><img src="images/img_182.png"><div class="info"><div class="name">Snowy Winter</div></div></div>
-  <div class="card"><img src="images/img_183.png"><div class="info"><div class="name">Desert Dunes</div></div></div>
-  <div class="card"><img src="images/img_184.png"><div class="info"><div class="name">Waterfall + Rainbow</div></div></div>
-  <div class="card"><img src="images/img_185.png"><div class="info"><div class="name">Cherry Blossom</div></div></div>
-  <div class="card"><img src="images/img_186.png"><div class="info"><div class="name">Northern Lights</div></div></div>
-</div>
-
-<h3>Urban</h3>
-<div class="grid grid-4">
-  <div class="card"><img src="images/img_187.png"><div class="info"><div class="name">Tokyo Neon</div><div class="rating"><span class="tag green">최고!</span></div></div></div>
-  <div class="card"><img src="images/img_188.png"><div class="info"><div class="name">NYC Times Square</div></div></div>
-  <div class="card"><img src="images/img_189.png"><div class="info"><div class="name">European Old Town</div></div></div>
-  <div class="card"><img src="images/img_190.png"><div class="info"><div class="name">Dystopian City</div></div></div>
-  <div class="card"><img src="images/img_191.png"><div class="info"><div class="name">Rooftop Skyline</div></div></div>
-  <div class="card"><img src="images/img_192.png"><div class="info"><div class="name">Subway</div></div></div>
-  <div class="card"><img src="images/img_193.png"><div class="info"><div class="name">Construction Site</div></div></div>
-  <div class="card"><img src="images/img_194.png"><div class="info"><div class="name">Rainy Chinatown</div></div></div>
-</div>
-
-<h3>Interior</h3>
-<div class="grid grid-4">
-  <div class="card"><img src="images/img_195.png"><div class="info"><div class="name">Gothic Cathedral</div></div></div>
-  <div class="card"><img src="images/img_196.png"><div class="info"><div class="name">Cozy Library</div></div></div>
-  <div class="card"><img src="images/img_197.png"><div class="info"><div class="name">Abandoned Factory</div></div></div>
-  <div class="card"><img src="images/img_198.png"><div class="info"><div class="name">Neon Nightclub</div></div></div>
-  <div class="card"><img src="images/img_199.png"><div class="info"><div class="name">Space Station</div></div></div>
-  <div class="card"><img src="images/img_200.png"><div class="info"><div class="name">Japanese Onsen</div></div></div>
-  <div class="card"><img src="images/img_201.png"><div class="info"><div class="name">Medieval Tavern</div><div class="rating"><span class="tag green">최고!</span></div></div></div>
-  <div class="card"><img src="images/img_202.png"><div class="info"><div class="name">Art Gallery</div></div></div>
-</div>
-
-<h3>Fantasy / Sci-Fi</h3>
-<div class="grid grid-4">
-  <div class="card"><img src="images/img_203.png"><div class="info"><div class="name">Floating Islands</div><div class="rating"><span class="tag green">최고!</span></div></div></div>
-  <div class="card"><img src="images/img_204.png"><div class="info"><div class="name">Underwater City</div></div></div>
-  <div class="card"><img src="images/img_205.png"><div class="info"><div class="name">Lava Planet</div></div></div>
-  <div class="card"><img src="images/img_206.png"><div class="info"><div class="name">Crystal Cave</div></div></div>
-  <div class="card"><img src="images/img_207.png"><div class="info"><div class="name">Cyberpunk Market</div></div></div>
-  <div class="card"><img src="images/img_208.png"><div class="info"><div class="name">Ancient Ruins</div></div></div>
-  <div class="card"><img src="images/img_209.png"><div class="info"><div class="name">Steampunk Airship</div></div></div>
-  <div class="card"><img src="images/img_210.png"><div class="info"><div class="name">Post-Apocalyptic</div></div></div>
-</div>
-
-<!-- ============================================ -->
-<!-- ASPECT RATIOS -->
-<!-- ============================================ -->
-<h2>9. Extreme Aspect Ratios</h2>
-
-<h3>Wide Spectrum (4:3 → 3:1)</h3>
-<p class="section-desc">동일 씬(네온 비 거리)으로 비율만 점진적 확대. 2.39:1까지 캐릭터 구도 안정적.</p>
-<div class="comparison">
-  <img src="images/img_211.png" title="4:3" style="height:150px">
-  <img src="images/img_212.png" title="16:9" style="height:150px">
-  <img src="images/img_213.png" title="21:9" style="height:150px">
-  <img src="images/img_214.png" title="2.39:1" style="height:150px">
-  <img src="images/img_215.png" title="32:9" style="height:150px">
-  <img src="images/img_216.png" title="3:1" style="height:150px">
-</div>
-
-<h3>Ultrawide (21:9) Cinematic Compositions</h3>
-<div class="grid grid-2">
-  <div class="card"><img src="images/img_217.png"><div class="info"><div class="name">Epic Landscape</div><div class="desc">절벽 위 작은 인물 + 거대 계곡</div></div></div>
-  <div class="card"><img src="images/img_218.png"><div class="info"><div class="name">Chase Action</div><div class="desc">좁은 골목 추격, 모션블러</div></div></div>
-  <div class="card"><img src="images/img_219.png"><div class="info"><div class="name">Conversation Distance</div><div class="desc">빈 공간으로 고독 표현</div><div class="rating"><span class="tag green">최고!</span></div></div></div>
-  <div class="card"><img src="images/img_220.png"><div class="info"><div class="name">Kubrick Symmetry</div><div class="desc">소실점 대칭 복도</div></div></div>
-  <div class="card"><img src="images/img_221.png"><div class="info"><div class="name">Western Standoff</div><div class="desc">황량한 마을 대결</div></div></div>
-  <div class="card"><img src="images/img_222.png"><div class="info"><div class="name">Car Interior</div><div class="desc">대시보드 + 도시 불빛</div></div></div>
-  <div class="card"><img src="images/img_223.png"><div class="info"><div class="name">Battle Scene</div><div class="desc">양쪽 군대 충돌</div></div></div>
-  <div class="card"><img src="images/img_224.png"><div class="info"><div class="name">Sci-Fi Bridge</div><div class="desc">파노라마 창 + 지구 + 홀로그램</div></div></div>
-</div>
-
-<h3>Tall Spectrum (3:4 → 1:3)</h3>
-<p class="section-desc">동일 씬(고딕 성당 올려다보기). 세로가 길어질수록 건축물의 수직 웅장함 증가.</p>
-<div class="comparison">
-  <img src="images/img_225.png" title="3:4" style="height:250px">
-  <img src="images/img_226.png" title="2:3" style="height:250px">
-  <img src="images/img_227.png" title="9:16" style="height:250px">
-  <img src="images/img_228.png" title="9:21" style="height:250px">
-  <img src="images/img_229.png" title="1:2.76" style="height:250px">
-  <img src="images/img_230.png" title="1:3" style="height:250px">
-</div>
-
-<!-- ============================================ -->
-<!-- SUMMARY -->
-<!-- ============================================ -->
-<h2>10. Summary & Quick Reference</h2>
-
-<div class="summary-box">
-<h3>ZIT Prompting Formula</h3>
-<div class="prompt-example">[Style] of [Character ~20 words], [Expression/Pose], [Clothing], [Environment], [Lighting], [Color/Mood]
+<div class="sp"><b>Model</b> z-image-turbo bf16</div>
+<div class="sp"><b>Encoder</b> Qwen3-4B</div>
+<div class="sp"><b>CFG</b> 1</div>
+<div class="sp"><b>Steps</b> 8</div>
+<div class="sp"><b>Sampler</b> euler+beta</div>
+<div class="sp"><b>GPU</b> RTX 5060 Ti 16GB</div>
+</div></div>
+<section id="styles"><h2>🎨 1. Art Style Baseline</h2>
+<p class="sd">동일 캐릭터를 12가지 아트 스타일로 생성. '미디엄 퍼스트' 패턴 사용.</p>
+<div class="tip"><p><b>💡 Tip:</b> 스타일을 맨 앞에 배치하면 가장 안정적. Tier 1(사진/디지털/3D/애니/유화)은 키워드만으로 충분.</p></div>
+<div class="grid g4">
+<div class="card">
+<img src="images/ZIT_P1_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Photorealistic <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Professional DSLR photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, studio lighting, sharp focus, shallow depth of field</div><div class="cm"><span class="it">의도:</span> 사진 리얼리즘<br><span class="rs">결과:</span> 피부 질감, 주근깨까지 사실적</div><div class="rt">⭐⭐⭐⭐⭐</div></div></div>
+<div class="card">
+<img src="images/ZIT_P1_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Cinematic <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">35mm cinematic film still of a young woman with short red hair and green eyes, wearing a dark leather jacket, moody atmospheric lighting, anamorphic lens flare</div><div class="cm"><span class="it">의도:</span> 영화적 분위기<br><span class="rs">결과:</span> 무디한 조명, 렌즈 플레어 완벽</div><div class="rt">⭐⭐⭐⭐⭐</div></div></div>
+<div class="card">
+<img src="images/ZIT_P1_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Digital Illustration <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing a dark leather jacket, clean lines, vibrant colors, concept art style</div><div class="cm"><span class="it">의도:</span> 디지털 아트<br><span class="rs">결과:</span> 깨끗한 라인, 밝은 색감 정확</div><div class="rt">⭐⭐⭐⭐⭐</div></div></div>
+<div class="card">
+<img src="images/ZIT_P1_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Oil Painting <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Oil painting on canvas of a young woman with short red hair and green eyes, wearing a dark leather jacket, visible impasto brushstrokes, rich warm tones, classical portrait</div><div class="cm"><span class="it">의도:</span> 전통 유화<br><span class="rs">결과:</span> 캔버스 텍스처, 임파스토 붓터치</div><div class="rt">⭐⭐⭐⭐⭐</div></div></div>
+<div class="card">
+<img src="images/ZIT_P1_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Watercolor <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Watercolor painting of a young woman with short red hair and green eyes, wearing a dark leather jacket, loose wet-on-wet washes, soft color bleeds, visible paper texture</div><div class="cm"><span class="it">의도:</span> 수채화 번짐<br><span class="rs">결과:</span> 물감 번짐, 종이 질감 완벽</div><div class="rt">⭐⭐⭐⭐⭐</div></div></div>
+<div class="card">
+<img src="images/ZIT_P1_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Anime Cel-shaded <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Cel-shaded anime illustration of a young woman with short red hair and green eyes, wearing a dark leather jacket, clean outlines, flat shading with highlights, large expressive eyes</div><div class="cm"><span class="it">의도:</span> 애니 셀셰이드<br><span class="rs">결과:</span> 큰 눈, 깔끔한 외곽선 정확</div><div class="rt">⭐⭐⭐⭐⭐</div></div></div>
+<div class="card">
+<img src="images/ZIT_P1_07_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Manga B&W <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Black and white manga ink drawing of a young woman with short red hair and green eyes, wearing a dark leather jacket, dynamic linework, screentone shading, dramatic expression</div><div class="cm"><span class="it">의도:</span> 흑백 만화<br><span class="rs">결과:</span> 95% 흑백, 눈 색상 약간 남음</div><div class="rt">⭐⭐⭐⭐</div></div></div>
+<div class="card">
+<img src="images/ZIT_P1_08_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Western Comic <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Comic book art of a young woman with short red hair and green eyes, wearing a dark leather jacket, bold ink outlines, flat cel colors, halftone dots, action pose</div><div class="cm"><span class="it">의도:</span> 서양 코믹<br><span class="rs">결과:</span> 볼드 잉크, 하프톤, 액션 포즈</div><div class="rt">⭐⭐⭐⭐⭐</div></div></div>
+<div class="card">
+<img src="images/ZIT_P1_09_00001_.png" loading="lazy">
+<div class="info"><div class="nm">3D Render Pixar <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Pixar-style 3D render of a young woman with short red hair and green eyes, wearing a dark leather jacket, smooth subsurface scattering skin, soft studio lighting, appealing stylized proportions</div><div class="cm"><span class="it">의도:</span> 3D 렌더<br><span class="rs">결과:</span> SSS 피부, Pixar 비율 완벽</div><div class="rt">⭐⭐⭐⭐⭐</div></div></div>
+<div class="card">
+<img src="images/ZIT_P1_10_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Pixel Art <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">16-bit pixel art sprite of a young woman with short red hair and green eyes, wearing a dark leather jacket, clean pixel placement, limited color palette, retro game aesthetic</div><div class="cm"><span class="it">의도:</span> 픽셀아트<br><span class="rs">결과:</span> 픽셀 느낌 있으나 고해상도</div><div class="rt">⭐⭐⭐⭐</div></div></div>
+<div class="card">
+<img src="images/ZIT_P1_11_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Chibi <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Chibi style illustration of a young woman with short red hair and green eyes, wearing a dark leather jacket, super-deformed proportions with oversized head, tiny body, cute simplified features</div><div class="cm"><span class="it">의도:</span> 치비/SD<br><span class="rs">결과:</span> 큰 머리, 작은 몸, 완벽</div><div class="rt">⭐⭐⭐⭐⭐</div></div></div>
+<div class="card">
+<img src="images/ZIT_P1_12_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Flat Vector <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Flat vector illustration of a young woman with short red hair and green eyes, wearing a dark leather jacket, minimal geometric shapes, clean edges, limited flat color palette, modern graphic design</div><div class="cm"><span class="it">의도:</span> 벡터 일러스트<br><span class="rs">결과:</span> 미니멀 기하학, 플랫 컬러</div><div class="rt">⭐⭐⭐⭐⭐</div></div></div>
+</div></section>
+<section id="structure"><h2>📝 2. Prompt Structure</h2>
+<p class="sd">동일 스타일을 4가지 프롬프트 패턴으로 비교. 미디엄퍼스트 vs 주체퍼스트 vs 묘사만 vs 아티스트레퍼런스.</p>
+<div class="tip"><p><b>💡 Tip:</b> 미디엄 퍼스트(A)가 가장 안정적. 아티스트 레퍼런스(D)가 가장 감성적. Tier 3 스타일에서 묘사만(C) 패턴은 실패.</p></div>
+<div class="grid g4">
+<div class="card">
+<img src="images/ZIT_P2_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Photorealistic/A_medium_first <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Professional DSLR photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, studio lighting, sharp focus, shallow depth of field</div></div></div>
+<div class="card">
+<img src="images/ZIT_P2_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Photorealistic/B_subject_first <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">a young woman with short red hair and green eyes, wearing a dark leather jacket, captured as a professional DSLR photograph with studio lighting, sharp focus, shallow depth of field</div></div></div>
+<div class="card">
+<img src="images/ZIT_P2_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Photorealistic/C_descriptive_only <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">a young woman with short red hair and green eyes, wearing a dark leather jacket, with photographic clarity, crisp sharp details, smooth natural skin tones, blurred background bokeh, realistic proportions</div></div></div>
+<div class="card">
+<img src="images/ZIT_P2_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Photorealistic/D_artist_ref <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">In the style of Annie Leibovitz portrait photography, a young woman with short red hair and green eyes, wearing a dark leather jacket, dramatic studio lighting, shallow depth of field</div></div></div>
+<div class="card">
+<img src="images/ZIT_P2_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Watercolor/A_medium_first <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Watercolor painting of a young woman with short red hair and green eyes, wearing a dark leather jacket, loose wet-on-wet washes, soft color bleeds, visible paper texture</div></div></div>
+<div class="card">
+<img src="images/ZIT_P2_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Watercolor/B_subject_first <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">a young woman with short red hair and green eyes, wearing a dark leather jacket, painted in delicate watercolor style with loose wet-on-wet washes, soft color bleeds, visible paper texture</div></div></div>
+<div class="card">
+<img src="images/ZIT_P2_07_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Watercolor/C_descriptive_only <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">a young woman with short red hair and green eyes, wearing a dark leather jacket, with loose translucent brushstrokes, soft color bleeding at edges, visible rough paper grain, muted diluted pigments</div></div></div>
+<div class="card">
+<img src="images/ZIT_P2_08_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Watercolor/D_artist_ref <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">In the style of Agnes Cecile watercolor portraits, a young woman with short red hair and green eyes, wearing a dark leather jacket, expressive dripping paint, emotional color washes</div></div></div>
+<div class="card">
+<img src="images/ZIT_P2_09_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Gouache/A_medium_first <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Gouache painting of a young woman with short red hair and green eyes, wearing a dark leather jacket, opaque matte finish, visible flat brushstrokes, rich saturated pigments on toned paper</div></div></div>
+<div class="card">
+<img src="images/ZIT_P2_10_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Gouache/B_subject_first <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">a young woman with short red hair and green eyes, wearing a dark leather jacket, rendered in gouache with opaque matte finish, visible flat brushstrokes, rich saturated pigments</div></div></div>
+<div class="card">
+<img src="images/ZIT_P2_11_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Gouache/C_descriptive_only <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">a young woman with short red hair and green eyes, wearing a dark leather jacket, with opaque matte painted surface, dense flat color areas, visible directional brush marks, creamy texture</div></div></div>
+<div class="card">
+<img src="images/ZIT_P2_12_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Gouache/D_artist_ref <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">In the style of Sachin Teng gouache illustrations, a young woman with short red hair and green eyes, wearing a dark leather jacket, bold flat shapes, graphic quality with painterly texture</div></div></div>
+</div></section>
+<section id="costumes"><h2>👗 3. Costume & Genre</h2>
+<p class="sd">동일 캐릭터에 의상만 변경. 역사/판타지SF/현대직업/전통문화/서브컬처 30종.</p>
+<div class="tip"><p><b>💡 Tip:</b> 의상 설명은 '재질+색상+디테일' 순으로. 소품은 'holding a ~'. 문화 의상에서 캐릭터 특성 유지하려면 머리색을 한번 더 강조.</p></div>
+<div class="grid g4">
+<div class="card">
+<img src="images/ZIT_CA_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Ancient Egyptian <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing ancient Egyptian royal attire with golden headdress, white linen dress, turquoise and gold jewelry, kohl-lined eyes, full body standing pose, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_CA_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Medieval Knight <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing full medieval plate armor with chainmail underneath, heraldic tabard with lion crest, sword at her side, full body standing pose, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_CA_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Renaissance Noble <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing an elaborate Renaissance gown with puffed sleeves, brocade fabric, pearl necklace, hair adorned with jewels, full body standing pose, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_CA_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Edo Period Samurai <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing traditional Japanese samurai armor with ornate kabuto helmet, katana at waist, full body standing pose, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_CA_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Victorian Lady <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing a Victorian-era dress with high collar, bustle skirt, lace gloves, cameo brooch, parasol in hand, full body standing pose, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_CA_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">1920s Flapper <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing a 1920s flapper dress with fringe and sequins, feathered headband, long pearl necklace, T-strap heels, full body standing pose, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_CB_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">High Fantasy Mage <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing flowing wizard robes with arcane rune embroidery, holding a glowing crystal staff, pointed hat, mystical aura, full body standing pose, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_CB_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Dark Fantasy Assassin <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing dark leather assassin gear with hooded cloak, multiple hidden daggers, belt pouches, face half-covered by shadow, full body standing pose, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_CB_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Cyberpunk Hacker <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing cyberpunk outfit with neon-lit circuit patterns, holographic visor, tech jacket with exposed wiring, augmented arm, full body standing pose, dark background</div></div></div>
+<div class="card">
+<img src="images/ZIT_CB_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Space Marine <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing futuristic power armor with glowing energy lines, heavy plasma rifle, helmet clipped to belt, full body standing pose, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_CB_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Steampunk Engineer <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing steampunk attire with brass goggles on forehead, corset with gear motifs, leather tool belt, mechanical arm brace, full body standing pose, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_CB_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Pirate Captain <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing pirate captain outfit with tricorn hat, long red coat with gold trim, cutlass at hip, knee-high boots, full body standing pose, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_CC_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Business Suit <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing a tailored charcoal business suit with white blouse, stiletto heels, briefcase in hand, confident pose, full body standing pose, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_CC_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Chef <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing professional chef whites with double-breasted jacket, chef's toque hat, apron, holding a kitchen knife, full body standing pose, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_CC_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Firefighter <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing full firefighter turnout gear with reflective stripes, helmet under arm, oxygen tank on back, full body standing pose, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_CC_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Doctor / Surgeon <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing hospital scrubs with surgical mask around neck, stethoscope, latex gloves, ID badge, full body standing pose, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_CC_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Military Soldier <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing modern military combat uniform with tactical vest, helmet with night vision mount, assault rifle, combat boots, full body standing pose, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_CC_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Astronaut <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing NASA-style spacesuit with helmet held under arm, mission patches on chest, full body standing pose, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_CD_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Korean Hanbok <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing a traditional Korean hanbok with colorful jeogori top and flowing chima skirt, ornate norigae pendant, traditional hair accessories, full body standing pose, clean back...</div></div></div>
+<div class="card">
+<img src="images/ZIT_CD_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Japanese Kimono <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing an elegant Japanese kimono with floral pattern, wide obi belt, wooden geta sandals, holding a folding fan, full body standing pose, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_CD_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Indian Sari <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing a richly embroidered Indian sari in deep red with gold border, bindhi on forehead, gold bangles and earrings, full body standing pose, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_CD_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Scottish Highland <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing traditional Scottish Highland dress with tartan kilt, sporran, ghillie shirt, tartan sash, full body standing pose, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_CD_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Arabian Nights <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing ornate Arabian-style outfit with silk harem pants, jeweled crop top, flowing sheer veil, gold coin belt, full body standing pose, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_CD_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Chinese Hanfu <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing elegant traditional Chinese hanfu with wide flowing sleeves, layered silk robes, jade hair ornaments, embroidered sash, full body standing pose, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_CE_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Gothic Lolita <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing Gothic Lolita fashion with black ruffled dress, white lace trim, platform boots, cross necklace, mini top hat, parasol, full body standing pose, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_CE_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Streetwear / Hypebeast <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing hypebeast streetwear with oversized graphic hoodie, cargo pants, chunky sneakers, bucket hat, crossbody bag, full body standing pose, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_CE_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Punk Rock <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing punk rock outfit with ripped band t-shirt, studded leather vest, plaid skirt, fishnet stockings, combat boots, safety pin accessories, full body standing pose, clean ba...</div></div></div>
+<div class="card">
+<img src="images/ZIT_CE_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Ballerina <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing a classical ballet outfit with white tutu, pointe shoes with satin ribbons, hair in neat bun, graceful pose, full body standing pose, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_CE_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Athletic / Sports <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing athletic sportswear with fitted tank top, running shorts, high-performance sneakers, sports watch, sweatband, full body standing pose, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_CE_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Wedding Dress <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Digital illustration of a young woman with short red hair and green eyes, wearing an elegant white wedding gown with long lace train, cathedral veil, bouquet of white roses, pearl tiara, full body standing pose, clean background</div></div></div>
+</div></section>
+<section id="camera"><h2>📷 4. Camera & Depth of Field</h2>
+<p class="sd">샷 사이즈/카메라 앵글/심도 표현/렌즈 효과 32종. 배경: 네온 비 거리 통일.</p>
+<div class="tip"><p><b>💡 Tip:</b> 영화 용어(close-up, medium shot)가 정확하게 작동. 심도는 묘사적 표현('creamy bokeh')이 f값보다 효과적.</p></div>
+<div class="grid g4">
+<div class="card">
+<img src="images/ZIT_FA_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Extreme Close-up <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Extreme close-up photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, focusing on her eyes and nose, every pore and freckle visible, standing in a busy city street with neon signs and pedestrians in the backg...</div></div></div>
+<div class="card">
+<img src="images/ZIT_FA_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Close-up <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, head and shoulders framing, standing in a busy city street with neon signs and pedestrians in the background</div></div></div>
+<div class="card">
+<img src="images/ZIT_FA_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Medium Close-up <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Medium close-up photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, chest-up framing, standing in a busy city street with neon signs and pedestrians in the background</div></div></div>
+<div class="card">
+<img src="images/ZIT_FA_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Medium Shot <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Medium shot photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, waist-up framing, standing in a busy city street with neon signs and pedestrians in the background</div></div></div>
+<div class="card">
+<img src="images/ZIT_FA_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Medium Full Shot <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Medium full shot photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, knees-up framing, standing in a busy city street with neon signs and pedestrians in the background</div></div></div>
+<div class="card">
+<img src="images/ZIT_FA_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Full Shot <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Full body shot photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, head to toe visible with some space above and below, standing in a busy city street with neon signs and pedestrians in the background</div></div></div>
+<div class="card">
+<img src="images/ZIT_FA_07_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Wide Shot <span class="tg tg-b">1344x768</span></div>
+<div class="pr">Wide shot photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, small figure in the frame with environment dominating, standing in a busy city street with neon signs and pedestrians in the background</div></div></div>
+<div class="card">
+<img src="images/ZIT_FA_08_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Extreme Wide Shot <span class="tg tg-b">1344x768</span></div>
+<div class="pr">Extreme wide shot photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, tiny figure lost in a vast cityscape, standing in a busy city street with neon signs and pedestrians in the background</div></div></div>
+<div class="card">
+<img src="images/ZIT_FB_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Eye Level <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Eye level photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, camera at subject eye height, natural perspective, standing in a busy city street with neon signs and pedestrians in the background</div></div></div>
+<div class="card">
+<img src="images/ZIT_FB_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Low Angle <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Low angle photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, camera looking up at subject from below, making her appear powerful and imposing, standing in a busy city street with neon signs and pedestrians ...</div></div></div>
+<div class="card">
+<img src="images/ZIT_FB_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">High Angle <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">High angle photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, camera looking down at subject from above, standing in a busy city street with neon signs and pedestrians in the background</div></div></div>
+<div class="card">
+<img src="images/ZIT_FB_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Bird's Eye View <span class="tg tg-b">1344x768</span></div>
+<div class="pr">Bird's eye view photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, camera directly overhead looking straight down, standing in a busy city street with neon signs and pedestrians in the background</div></div></div>
+<div class="card">
+<img src="images/ZIT_FB_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Worm's Eye View <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Worm's eye view photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, camera on the ground looking straight up, dramatic perspective, standing in a busy city street with neon signs and pedestrians in the backg...</div></div></div>
+<div class="card">
+<img src="images/ZIT_FB_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Dutch Angle <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Dutch angle photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, camera tilted at 30 degrees creating diagonal horizon line, dynamic unsettling composition, standing in a busy city street with neon signs and ...</div></div></div>
+<div class="card">
+<img src="images/ZIT_FB_07_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Over the Shoulder <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Over the shoulder photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, shot from behind another person looking at the subject, standing in a busy city street with neon signs and pedestrians in the background</div></div></div>
+<div class="card">
+<img src="images/ZIT_FB_08_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Profile View <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Profile view photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, camera positioned at exact 90 degree side angle showing her silhouette, standing in a busy city street with neon signs and pedestrians in the ...</div></div></div>
+<div class="card">
+<img src="images/ZIT_FC_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Deep DOF (f/16) <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, shot at f/16 with deep depth of field, everything from foreground to background in sharp focus, standing in a busy city street with neon signs and pedestri...</div></div></div>
+<div class="card">
+<img src="images/ZIT_FC_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Moderate DOF (f/5.6) <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, shot at f/5.6 with moderate depth of field, subject sharp with slightly soft background, standing in a busy city street with neon signs and pedestrians in ...</div></div></div>
+<div class="card">
+<img src="images/ZIT_FC_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Shallow DOF (f/2.8) <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, shot at f/2.8 with shallow depth of field, subject sharp against a softly blurred background bokeh, standing in a busy city street with neon signs and pede...</div></div></div>
+<div class="card">
+<img src="images/ZIT_FC_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Very Shallow DOF (f/1.4) <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, shot at f/1.4 with very shallow depth of field, only her eyes in focus with creamy bokeh background and foreground blur, standing in a busy city street wit...</div></div></div>
+<div class="card">
+<img src="images/ZIT_FC_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Foreground Bokeh <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, shot through blurred foreground elements like flowers and leaves creating soft foreground bokeh, subject in sharp focus behind, standing in a busy city str...</div></div></div>
+<div class="card">
+<img src="images/ZIT_FC_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Tilt-Shift Miniature <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Tilt-shift photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, miniature effect with narrow band of focus in the middle, top and bottom heavily blurred, standing in a busy city street with neon signs and ped...</div></div></div>
+<div class="card">
+<img src="images/ZIT_FC_07_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Rack Focus (bg sharp) <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph with rack focus effect, a young woman with short red hair and green eyes, wearing a dark leather jacket in the foreground slightly out of focus, background city street in sharp focus, standing in a busy city street with neon signs and pede...</div></div></div>
+<div class="card">
+<img src="images/ZIT_FC_08_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Bokeh Balls <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Night photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, shot at f/1.4 with beautiful circular bokeh balls from city lights in the background, shallow depth of field, standing in a busy city street with neo...</div></div></div>
+<div class="card">
+<img src="images/ZIT_FD_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Wide Angle 24mm <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Wide angle 24mm lens photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, slight barrel distortion at edges, exaggerated perspective, expansive background, standing in a busy city street with neon signs and p...</div></div></div>
+<div class="card">
+<img src="images/ZIT_FD_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Standard 50mm <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">50mm standard lens photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, natural perspective matching human vision, no distortion, standing in a busy city street with neon signs and pedestrians in the backgrou...</div></div></div>
+<div class="card">
+<img src="images/ZIT_FD_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Portrait 85mm <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">85mm portrait lens photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, flattering facial compression, smooth background separation, beautiful bokeh, standing in a busy city street with neon signs and pedestr...</div></div></div>
+<div class="card">
+<img src="images/ZIT_FD_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Telephoto 200mm <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">200mm telephoto lens photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, strong background compression, flattened perspective, very blurred background, standing in a busy city street with neon signs and pede...</div></div></div>
+<div class="card">
+<img src="images/ZIT_FD_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Fisheye <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Fisheye lens photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, extreme barrel distortion curving all straight lines, 180 degree field of view, standing in a busy city street with neon signs and pedestrians...</div></div></div>
+<div class="card">
+<img src="images/ZIT_FD_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Macro Detail <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Macro lens photograph focusing on a young woman with short red hair and green eyes, wearing a dark leather jacket's eye in extreme detail, reflecting the city lights, iris texture visible, eyelash detail, ultra shallow depth of field</div></div></div>
+<div class="card">
+<img src="images/ZIT_FD_07_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Anamorphic <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Anamorphic lens photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, horizontal lens flare streaks, oval bokeh shapes, cinematic 2.39:1 feel, standing in a busy city street with neon signs and pedestrians in ...</div></div></div>
+<div class="card">
+<img src="images/ZIT_FD_08_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Vintage Lens <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket shot with vintage Helios 44-2 lens, distinctive swirly bokeh in background, soft glow, slight vignetting, standing in a busy city street with neon signs and...</div></div></div>
+</div></section>
+<section id="lighting"><h2>💡 5. Lighting</h2>
+<p class="sd">빛 방향/자연광/인공광·색온도/특수 조명 32종. ZIT 최강 영역!</p>
+<div class="tip"><p><b>💡 Tip:</b> 'butterfly'는 'paramount lighting'으로 대체. 컬러 젤('single [색상] gel light')이 매우 강력. 블루&오렌지 보색 = 가장 시네마틱.</p></div>
+<div class="grid g4">
+<div class="card">
+<img src="images/ZIT_LA_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Front Light <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing in an empty studio, flat front lighting illuminating her face evenly with minimal shadows</div></div></div>
+<div class="card">
+<img src="images/ZIT_LA_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Side Light (Rembrandt) <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing in an empty studio, Rembrandt lighting with single light source from 45 degrees to the left, creating a triangle of light on the shadow side of he...</div></div></div>
+<div class="card">
+<img src="images/ZIT_LA_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Back Light (Silhouette) <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing in an empty studio, strong backlight behind her creating a silhouette effect with bright rim light outlining her hair and shoulders, face in shado...</div></div></div>
+<div class="card">
+<img src="images/ZIT_LA_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Top Light (Overhead) <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing in an empty studio, overhead top lighting casting dramatic downward shadows under eyes nose and chin, like harsh noon sun</div></div></div>
+<div class="card">
+<img src="images/ZIT_LA_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Under Light (Horror) <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing in an empty studio, dramatic under lighting from below casting upward shadows on face, eerie horror movie lighting effect</div></div></div>
+<div class="card">
+<img src="images/ZIT_LA_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Rim Light Only <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing in an empty studio, dual rim lights from both sides creating bright edge highlights on hair and shoulders against a dark background, face partiall...</div></div></div>
+<div class="card">
+<img src="images/ZIT_LA_07_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Split Light <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing in an empty studio, split lighting with exactly half her face illuminated and the other half in complete darkness, dramatic half-face portrait</div></div></div>
+<div class="card">
+<img src="images/ZIT_LA_08_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Butterfly Light <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing in an empty studio, butterfly lighting with light directly above and in front creating a small butterfly-shaped shadow under her nose, glamorous f...</div></div></div>
+<div class="card">
+<img src="images/ZIT_LB_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Golden Hour <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, outdoors at golden hour, warm orange sunlight casting long shadows, golden glow on skin and hair, soft warm atmosphere</div></div></div>
+<div class="card">
+<img src="images/ZIT_LB_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Blue Hour <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, outdoors at blue hour twilight, cool blue ambient light, city lights beginning to glow in background, serene moody atmosphere</div></div></div>
+<div class="card">
+<img src="images/ZIT_LB_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Harsh Midday Sun <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, outdoors under harsh midday sun, strong overhead sunlight creating deep shadows under eyes and chin, squinting slightly, high contrast</div></div></div>
+<div class="card">
+<img src="images/ZIT_LB_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Overcast Soft Light <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, outdoors on an overcast cloudy day, soft diffused even lighting with no harsh shadows, gentle flat light</div></div></div>
+<div class="card">
+<img src="images/ZIT_LB_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Window Light <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, indoors next to a large window, soft natural window light illuminating one side of her face, gentle gradient from light to shadow</div></div></div>
+<div class="card">
+<img src="images/ZIT_LB_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Dappled Light <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing under trees with dappled sunlight filtering through leaves, creating patterns of light and shadow on her face and jacket</div></div></div>
+<div class="card">
+<img src="images/ZIT_LB_07_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Sunrise Backlit <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing facing away from a dramatic sunrise, warm backlit glow surrounding her silhouette, lens flare, golden sky</div></div></div>
+<div class="card">
+<img src="images/ZIT_LB_08_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Moonlight <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, outdoors at night illuminated only by cool blue moonlight, subtle silver highlights, dark mysterious atmosphere, starry sky</div></div></div>
+<div class="card">
+<img src="images/ZIT_LC_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Warm Tungsten 3200K <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing in an empty studio, lit by warm tungsten light at 3200K, orange-yellow warm cast on skin, cozy intimate atmosphere</div></div></div>
+<div class="card">
+<img src="images/ZIT_LC_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Cool Daylight 5600K <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing in an empty studio, lit by neutral daylight-balanced light at 5600K, clean natural white light, no color cast</div></div></div>
+<div class="card">
+<img src="images/ZIT_LC_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Cold Fluorescent <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing in an empty studio, lit by cold overhead fluorescent lights, slightly greenish-blue unflattering cast, institutional feeling</div></div></div>
+<div class="card">
+<img src="images/ZIT_LC_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Neon Mixed Colors <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing in a dark alley, lit by multiple neon signs casting red blue and purple colored light on her face, cyberpunk mixed color lighting</div></div></div>
+<div class="card">
+<img src="images/ZIT_LC_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Single Red Gel <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing in an empty studio, lit entirely by a single red gel light, deep red monochromatic lighting casting crimson tones across everything</div></div></div>
+<div class="card">
+<img src="images/ZIT_LC_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Blue and Orange Contrast <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing in an empty studio, cinematic two-tone lighting with warm orange light from one side and cool blue light from the other, complementary color contr...</div></div></div>
+<div class="card">
+<img src="images/ZIT_LC_07_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Green Neon Glow <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, in a dark room, lit by eerie green neon light reflecting off her face, matrix-like green glow, sci-fi atmosphere</div></div></div>
+<div class="card">
+<img src="images/ZIT_LC_08_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Purple UV Blacklight <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, in a dark room under UV blacklight, purple ultraviolet glow making whites fluoresce, nightclub atmosphere</div></div></div>
+<div class="card">
+<img src="images/ZIT_LD_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Volumetric / God Rays <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, in a dusty dark cathedral, dramatic volumetric god rays of light streaming through high windows, particles visible in light beams</div></div></div>
+<div class="card">
+<img src="images/ZIT_LD_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Candlelight <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, in a dark room lit only by a single candle she holds, warm flickering candlelight illuminating her face from below, intimate chiaroscuro</div></div></div>
+<div class="card">
+<img src="images/ZIT_LD_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Fire Light <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, sitting by a campfire at night, warm dancing firelight casting flickering orange glow and moving shadows on her face</div></div></div>
+<div class="card">
+<img src="images/ZIT_LD_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Screen Glow <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, in a completely dark room, her face illuminated only by the blue-white glow of a computer screen, tech hacker atmosphere</div></div></div>
+<div class="card">
+<img src="images/ZIT_LD_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Lightning Flash <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, outdoors in a thunderstorm, captured at the exact moment of a lightning flash, brief intense white light illuminating the rain-soaked scene</div></div></div>
+<div class="card">
+<img src="images/ZIT_LD_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Reflection Light <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing by a calm lake at sunset, warm reflected light bouncing off the water surface casting soft golden uplight on her face</div></div></div>
+<div class="card">
+<img src="images/ZIT_LD_07_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Stained Glass Light <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing in a gothic church, colorful light from stained glass windows casting red blue and gold patterns across her face and body</div></div></div>
+<div class="card">
+<img src="images/ZIT_LD_08_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Spotlight Dramatic <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, on a dark empty stage, single intense spotlight from above creating a sharp circle of light around her, everything outside the beam in complete darkness</div></div></div>
+</div></section>
+<section id="expressions"><h2>😊 6. Expression & Emotion</h2>
+<p class="sd">기본 감정/미묘한 감정/웃음 스펙트럼/극적 연기 32종. 클로즈업 포트레이트.</p>
+<div class="tip"><p><b>💡 Tip:</b> 기본 감정은 단어만으로 충분. 복합 감정은 대조 묘사('smiling but with teary eyes'). 윙크 가능!</p></div>
+<div class="grid g4">
+<div class="card">
+<img src="images/ZIT_EA_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Neutral <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, neutral relaxed expression, calm blank face with no particular emotion, soft studio lighting, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_EA_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Happy / Joyful <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, genuinely happy expression with a wide bright smile showing teeth, crinkled eyes, radiating joy, soft studio lighting, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_EA_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Sad / Sorrowful <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, deeply sad expression with downturned mouth, glistening teary eyes, furrowed brow, looking down, soft studio lighting, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_EA_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Angry / Furious <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, intensely angry expression with furrowed brow, clenched jaw, flared nostrils, piercing glare, soft studio lighting, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_EA_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Fearful / Terrified <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, terrified expression with wide open eyes, raised eyebrows, open mouth, looking at something frightening off-camera, soft studio lighting,...</div></div></div>
+<div class="card">
+<img src="images/ZIT_EA_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Disgusted <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, disgusted expression with wrinkled nose, raised upper lip, squinting eyes, turning away slightly, soft studio lighting, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_EA_07_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Surprised / Shocked <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, genuinely surprised expression with wide open eyes, raised eyebrows, mouth open in an O shape, soft studio lighting, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_EA_08_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Contempt <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, contemptuous expression with one corner of mouth raised in a smirk, one eyebrow slightly raised, looking down at camera, soft studio ligh...</div></div></div>
+<div class="card">
+<img src="images/ZIT_EB_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Melancholic <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, melancholic wistful expression, gazing into the distance with a bittersweet sadness, slightly parted lips, soft studio lighting, clean ba...</div></div></div>
+<div class="card">
+<img src="images/ZIT_EB_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Nostalgic <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, nostalgic expression with a gentle half-smile, eyes unfocused as if lost in a distant memory, soft warmth in her gaze, soft studio lighti...</div></div></div>
+<div class="card">
+<img src="images/ZIT_EB_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Determined / Resolute <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, fiercely determined expression with set jaw, focused intense eyes, slight frown of concentration, unwavering gaze, soft studio lighting, ...</div></div></div>
+<div class="card">
+<img src="images/ZIT_EB_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Mischievous <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, mischievous playful expression with a sly smirk, one eyebrow raised, eyes twinkling with a secret, soft studio lighting, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_EB_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Embarrassed / Shy <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, embarrassed expression with blushing red cheeks, avoiding eye contact, biting her lower lip, hand touching her neck, soft studio lighting...</div></div></div>
+<div class="card">
+<img src="images/ZIT_EB_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Exhausted / Weary <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, exhausted tired expression with heavy drooping eyelids, dark circles under eyes, slack face, slightly disheveled hair, soft studio lighti...</div></div></div>
+<div class="card">
+<img src="images/ZIT_EB_07_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Suspicious / Skeptical <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, suspicious skeptical expression with narrowed eyes, one eyebrow raised, tilted head, slight frown, soft studio lighting, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_EB_08_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Vulnerable / Fragile <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, vulnerable fragile expression with glassy eyes on the verge of tears, trembling lower lip, looking up at camera with pleading gaze, soft ...</div></div></div>
+<div class="card">
+<img src="images/ZIT_EC_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Slight Smile (Mona Lisa) <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, barely perceptible Mona Lisa smile, mysterious subtle upturn of lips, enigmatic expression, soft studio lighting, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_EC_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Polite Smile <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, polite professional smile with closed lips, pleasant but reserved expression, eyes neutral, soft studio lighting, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_EC_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Warm Genuine Smile <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, warm genuine Duchenne smile reaching her eyes, natural relaxed happiness, crow's feet at eyes, soft studio lighting, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_EC_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Big Grin <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, big enthusiastic grin showing all teeth, eyes squinted with pure delight, infectious energy, soft studio lighting, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_EC_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Laughing <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, caught mid-laugh with mouth wide open, eyes squeezed shut, head tilted back slightly, pure uninhibited laughter, soft studio lighting, cl...</div></div></div>
+<div class="card">
+<img src="images/ZIT_EC_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Smirk / Cocky <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, cocky one-sided smirk, one corner of mouth pulled up, confident knowing look, slightly lowered chin, soft studio lighting, clean backgrou...</div></div></div>
+<div class="card">
+<img src="images/ZIT_EC_07_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Sad Smile <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, bittersweet sad smile with upturned lips but glistening watery eyes, trying to hold back tears while smiling, soft studio lighting, clean...</div></div></div>
+<div class="card">
+<img src="images/ZIT_EC_08_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Forced Smile <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, obviously forced fake smile that doesn't reach her eyes, tense jaw, dead eyes contrasting with stretched lips, soft studio lighting, clea...</div></div></div>
+<div class="card">
+<img src="images/ZIT_ED_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Screaming <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, screaming with mouth wide open, veins visible on neck, intense primal expression of raw emotion, soft studio lighting, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_ED_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Crying <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, crying with tears streaming down both cheeks, red puffy eyes, runny nose, face crumpled in grief, soft studio lighting, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_ED_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Maniacal Laugh <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, maniacal unhinged laughter with wild wide eyes, head thrown back, mouth stretched in an extreme grin, slightly crazed look, soft studio l...</div></div></div>
+<div class="card">
+<img src="images/ZIT_ED_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Seething Rage <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, seething with barely contained rage, teeth bared, flared nostrils, bulging eyes, red-faced, trembling with fury, soft studio lighting, cl...</div></div></div>
+<div class="card">
+<img src="images/ZIT_ED_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Deep Thought <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, deep in thought with furrowed brow, eyes looking up and to the right, finger on chin, contemplative philosophical expression, soft studio...</div></div></div>
+<div class="card">
+<img src="images/ZIT_ED_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Winking <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, playful wink with one eye closed, slight smile, fun charismatic expression, soft studio lighting, clean background</div></div></div>
+<div class="card">
+<img src="images/ZIT_ED_07_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Poker Face <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, completely blank poker face, utterly unreadable expression, no emotion whatsoever, staring directly at camera, soft studio lighting, clea...</div></div></div>
+<div class="card">
+<img src="images/ZIT_ED_08_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Awe / Wonder <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Close-up portrait photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, awestruck expression of pure wonder, mouth slightly open, eyes wide and sparkling, gazing upward at something magnificent, bathed in warm...</div></div></div>
+</div></section>
+<section id="poses"><h2>🏃 7. Pose & Action</h2>
+<p class="sd">정적 포즈/다이나믹 액션/제스처·핸드포즈/상호작용·상황 32종.</p>
+<div class="tip"><p><b>💡 Tip:</b> 순간 묘사 추가('mid-stride', 'freeze-frame'). 손 제스처(피스/하트/엄지척) 매우 정확.</p></div>
+<div class="grid g4">
+<div class="card">
+<img src="images/ZIT_PA_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Standing Straight <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Full body photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing straight with arms at sides, relaxed neutral posture, facing camera, clean studio background, full body shot, professional photograph</div></div></div>
+<div class="card">
+<img src="images/ZIT_PA_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Arms Crossed <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Full body photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing with arms crossed over chest, confident assertive posture, clean studio background, full body shot, professional photograph</div></div></div>
+<div class="card">
+<img src="images/ZIT_PA_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Hands on Hips <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Full body photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing with both hands on hips, power pose, legs slightly apart, clean studio background, full body shot, professional photograph</div></div></div>
+<div class="card">
+<img src="images/ZIT_PA_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Sitting on Chair <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Full body photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, sitting on a wooden chair, legs crossed, leaning back casually, relaxed pose, clean studio background, full body shot, professional photograph</div></div></div>
+<div class="card">
+<img src="images/ZIT_PA_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Leaning on Wall <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Full body photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, leaning against a wall with one shoulder, arms crossed, one foot propped against the wall, cool relaxed pose, clean studio background, full body ...</div></div></div>
+<div class="card">
+<img src="images/ZIT_PA_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Crouching <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Full body photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, crouching down low with one knee on the ground, looking up at camera, clean studio background, full body shot, professional photograph</div></div></div>
+<div class="card">
+<img src="images/ZIT_PA_07_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Sitting on Floor <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Full body photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, sitting cross-legged on the floor, hands on knees, looking at camera, clean studio background, full body shot, professional photograph</div></div></div>
+<div class="card">
+<img src="images/ZIT_PA_08_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Back Turned <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Full body photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing with her back to the camera, looking over her shoulder, clean studio background, full body shot, professional photograph</div></div></div>
+<div class="card">
+<img src="images/ZIT_PB_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Running <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Full body photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, running at full speed toward camera, hair flowing back, mid-stride with one foot off ground, dynamic motion blur, clean studio background, full b...</div></div></div>
+<div class="card">
+<img src="images/ZIT_PB_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Jumping <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Full body photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, jumping high in the air with arms raised, legs bent, captured at peak height, joyful expression, clean studio background, full body shot, profess...</div></div></div>
+<div class="card">
+<img src="images/ZIT_PB_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Kicking <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Full body photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, performing a high side kick, one leg extended horizontally, martial arts pose, clean studio background, full body shot, professional photograph</div></div></div>
+<div class="card">
+<img src="images/ZIT_PB_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Punching <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Full body photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, throwing a powerful punch toward camera with right fist, left arm guarding, boxing stance, clean studio background, full body shot, professional ...</div></div></div>
+<div class="card">
+<img src="images/ZIT_PB_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Dancing <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Full body photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, mid-dance with one arm extended gracefully, body in fluid motion, contemporary dance pose, clean studio background, full body shot, professional ...</div></div></div>
+<div class="card">
+<img src="images/ZIT_PB_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Falling Backwards <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Full body photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, falling backwards with arms outstretched, hair flying up, dramatic freeze-frame moment, clean studio background, full body shot, professional pho...</div></div></div>
+<div class="card">
+<img src="images/ZIT_PB_07_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Spinning <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Full body photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, spinning around with arms out, jacket flying open, hair whipping around, motion captured mid-turn, clean studio background, full body shot, profe...</div></div></div>
+<div class="card">
+<img src="images/ZIT_PB_08_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Climbing <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Full body photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, climbing up a rock wall, one hand reaching up for the next hold, body stretched vertically, athletic pose</div></div></div>
+<div class="card">
+<img src="images/ZIT_PC_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Peace Sign <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, making a peace sign with right hand near her face, playful smile, clean studio background, full body shot, professional photograph</div></div></div>
+<div class="card">
+<img src="images/ZIT_PC_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Thumbs Up <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, giving an enthusiastic thumbs up to camera, big smile, clean studio background, full body shot, professional photograph</div></div></div>
+<div class="card">
+<img src="images/ZIT_PC_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Pointing at Camera <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, pointing directly at camera with index finger, confident expression, clean studio background, full body shot, professional photograph</div></div></div>
+<div class="card">
+<img src="images/ZIT_PC_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Hand on Chin <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, resting chin on hand in thoughtful pose, elbow propped, contemplative look, clean studio background, full body shot, professional photograph</div></div></div>
+<div class="card">
+<img src="images/ZIT_PC_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Shrug <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Full body photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, shrugging with both palms up and shoulders raised, confused expression, clean studio background, full body shot, professional photograph</div></div></div>
+<div class="card">
+<img src="images/ZIT_PC_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Wave <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, waving hello at camera with one hand raised, friendly smile, clean studio background, full body shot, professional photograph</div></div></div>
+<div class="card">
+<img src="images/ZIT_PC_07_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Heart Hands <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, making a heart shape with both hands held up in front of her chest, cute pose, clean studio background, full body shot, professional photograph</div></div></div>
+<div class="card">
+<img src="images/ZIT_PC_08_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Finger to Lips <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, pressing one finger to her lips in a shush gesture, mysterious secretive expression, clean studio background, full body shot, professional photograph</div></div></div>
+<div class="card">
+<img src="images/ZIT_PD_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Reading a Book <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Full body photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, sitting in an armchair reading a book, legs tucked under her, absorbed in reading, warm cozy lighting</div></div></div>
+<div class="card">
+<img src="images/ZIT_PD_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Playing Guitar <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Full body photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, sitting on a stool playing an acoustic guitar, fingers on fretboard, focused expression, clean studio background, full body shot, professional ph...</div></div></div>
+<div class="card">
+<img src="images/ZIT_PD_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Taking a Photo <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Full body photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, holding a DSLR camera up to her eye, taking a photograph, one eye closed, clean studio background, full body shot, professional photograph</div></div></div>
+<div class="card">
+<img src="images/ZIT_PD_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Riding a Motorcycle <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, riding a vintage motorcycle, leaning forward on the handlebars, wind in her hair, open road ahead</div></div></div>
+<div class="card">
+<img src="images/ZIT_PD_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Holding an Umbrella <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Full body photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, walking in the rain holding a red umbrella, splashing through puddles, raindrops visible</div></div></div>
+<div class="card">
+<img src="images/ZIT_PD_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Drinking Coffee <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, holding a coffee cup with both hands, blowing on it gently, steam rising, cozy cafe background</div></div></div>
+<div class="card">
+<img src="images/ZIT_PD_07_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Working on Laptop <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, sitting at a desk typing on a laptop, focused expression, modern office background, screen glow on face</div></div></div>
+<div class="card">
+<img src="images/ZIT_PD_08_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Sword Fighting <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Full body photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, in mid-swing with a katana sword, dynamic battle pose, intense focused expression, dramatic lighting</div></div></div>
+</div></section>
+<section id="environments"><h2>🏔️ 8. Environment</h2>
+<p class="sd">자연/도시/실내/판타지SF 32종. 4:3 가로 비율. 'cinematic photograph' 프리픽스.</p>
+<div class="tip"><p><b>💡 Tip:</b> 지명/문화 키워드('Tokyo alley', 'Angkor Wat')가 매우 효과적. 날씨/대기 묘사로 품질 향상.</p></div>
+<div class="grid g4">
+<div class="card">
+<img src="images/ZIT_VA_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Dense Forest <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, walking through a dense ancient forest, massive moss-covered trees, shafts of sunlight piercing through canopy, misty atmosphere</div></div></div>
+<div class="card">
+<img src="images/ZIT_VA_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Mountain Peak <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing on a rocky mountain peak at sunrise, vast mountain range stretching to the horizon, dramatic clouds below, epic scale</div></div></div>
+<div class="card">
+<img src="images/ZIT_VA_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Beach Sunset <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing on a tropical beach at sunset, golden sand, turquoise waves, palm trees silhouetted against orange pink sky</div></div></div>
+<div class="card">
+<img src="images/ZIT_VA_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Snowy Landscape <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, trudging through deep snow in a winter forest, heavy snowfall, frosted pine trees, breath visible in cold air, blue winter light</div></div></div>
+<div class="card">
+<img src="images/ZIT_VA_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Desert Dunes <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, walking across vast golden sand dunes in the Sahara, endless desert horizon, harsh bright sunlight, long shadow stretching behind her</div></div></div>
+<div class="card">
+<img src="images/ZIT_VA_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Waterfall <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing near a massive waterfall in a lush tropical jungle, mist rising from the cascade, rainbow in the spray, verdant green vegetation</div></div></div>
+<div class="card">
+<img src="images/ZIT_VA_07_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Cherry Blossom <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, walking under a canopy of cherry blossom trees in full bloom, pink petals falling like snow, serene Japanese garden path</div></div></div>
+<div class="card">
+<img src="images/ZIT_VA_08_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Northern Lights <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing in an Icelandic landscape gazing up at vibrant green and purple northern lights aurora borealis dancing across the starry night sky</div></div></div>
+<div class="card">
+<img src="images/ZIT_VB_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Tokyo Neon Street <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, walking through a narrow Tokyo alley at night, dense neon signs in Japanese, wet reflective pavement, crowds of people, vibrant nightlife</div></div></div>
+<div class="card">
+<img src="images/ZIT_VB_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">NYC Times Square <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing in the middle of Times Square New York, massive illuminated billboards, yellow taxi cabs, bustling crowd, night time</div></div></div>
+<div class="card">
+<img src="images/ZIT_VB_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">European Old Town <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, walking through a narrow cobblestone street in an old European town, medieval stone buildings, flower boxes on windows, warm afternoon light</div></div></div>
+<div class="card">
+<img src="images/ZIT_VB_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Dystopian City <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, in a dark dystopian megacity, towering brutalist concrete buildings, smog-filled sky, neon advertisements, rain-soaked streets, blade runner atmo...</div></div></div>
+<div class="card">
+<img src="images/ZIT_VB_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Rooftop Skyline <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing on a skyscraper rooftop overlooking a modern city skyline at dusk, glass towers reflecting sunset, helicopters in distance</div></div></div>
+<div class="card">
+<img src="images/ZIT_VB_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Underground Subway <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing alone on an empty subway platform, fluorescent lights, tiled walls with graffiti, train headlights approaching in the dark tunnel</div></div></div>
+<div class="card">
+<img src="images/ZIT_VB_07_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Construction Site <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing in a massive industrial construction site, steel beams and cranes, sparks from welding in the background, gritty urban atmosphere</div></div></div>
+<div class="card">
+<img src="images/ZIT_VB_08_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Rainy Chinatown <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, walking through a rainy Chinatown district at night, red paper lanterns glowing, neon Chinese characters reflected in puddles, umbrella-carrying ...</div></div></div>
+<div class="card">
+<img src="images/ZIT_VC_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Gothic Cathedral <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing inside a grand gothic cathedral, soaring vaulted ceilings, stained glass windows casting colorful light, stone pillars, reverent atmosph...</div></div></div>
+<div class="card">
+<img src="images/ZIT_VC_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Cozy Library <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, in a cozy old library, towering walls of leather-bound books, rolling ladder, warm reading lamp glow, leather armchair, fireplace crackling</div></div></div>
+<div class="card">
+<img src="images/ZIT_VC_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Abandoned Factory <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, exploring a decaying abandoned industrial factory, rusted machinery, broken windows letting in shafts of dusty light, peeling paint, urban decay</div></div></div>
+<div class="card">
+<img src="images/ZIT_VC_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Neon Nightclub <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, inside a vibrant nightclub, laser lights cutting through smoke, DJ booth, dancing crowd silhouettes, purple and blue neon, energetic atmosphere</div></div></div>
+<div class="card">
+<img src="images/ZIT_VC_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Space Station <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, inside a futuristic space station corridor, sleek white walls with blue LED strips, circular windows showing Earth below, zero gravity hints</div></div></div>
+<div class="card">
+<img src="images/ZIT_VC_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Japanese Onsen <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, sitting on the edge of a traditional Japanese outdoor onsen hot spring, steam rising from the water, wooden bathhouse, bamboo fence, winter snow ...</div></div></div>
+<div class="card">
+<img src="images/ZIT_VC_07_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Medieval Tavern <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, sitting at a rough wooden table in a medieval tavern, candlelight, stone walls, other patrons in the background, tankards of ale, warm firelight</div></div></div>
+<div class="card">
+<img src="images/ZIT_VC_08_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Art Gallery <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing in a minimalist modern art gallery, white walls with large colorful abstract paintings, polished concrete floor, track lighting, contemp...</div></div></div>
+<div class="card">
+<img src="images/ZIT_VD_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Floating Islands <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing on a floating island in the sky, other floating landmasses with waterfalls cascading into clouds, bridges connecting islands, fantasy wo...</div></div></div>
+<div class="card">
+<img src="images/ZIT_VD_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Underwater City <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, inside a glass dome in an underwater city, bioluminescent sea creatures swimming outside, coral structures, blue-green light filtering through de...</div></div></div>
+<div class="card">
+<img src="images/ZIT_VD_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Lava Planet <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, on the surface of a volcanic planet, rivers of glowing lava flowing between black rock formations, orange sky filled with ash, dramatic hellscape</div></div></div>
+<div class="card">
+<img src="images/ZIT_VD_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Crystal Cave <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, inside a massive crystal cave, giant amethyst and quartz formations glowing with inner light, prismatic reflections, magical purple and blue atmo...</div></div></div>
+<div class="card">
+<img src="images/ZIT_VD_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Cyberpunk Market <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, browsing a crowded cyberpunk street market, holographic product displays, neon-lit food stalls, vendors with cybernetic enhancements, dense futur...</div></div></div>
+<div class="card">
+<img src="images/ZIT_VD_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Ancient Ruins <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, exploring ancient overgrown temple ruins in a jungle, massive carved stone faces covered in vines, crumbling pillars, Angkor Wat style, mysteriou...</div></div></div>
+<div class="card">
+<img src="images/ZIT_VD_07_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Steampunk Airship <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing on the deck of a steampunk airship flying through clouds, brass railings, propellers spinning, Victorian-era machinery, endless sky</div></div></div>
+<div class="card">
+<img src="images/ZIT_VD_08_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Post-Apocalyptic <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, walking through a post-apocalyptic overgrown city, nature reclaiming skyscrapers, crumbling highways, deer grazing on a rooftop garden, haunting ...</div></div></div>
+</div></section>
+<section id="ratios"><h2>📐 9. Aspect Ratios</h2>
+<p class="sd">와이드 스펙트럼(4:3→3:1)/울트라와이드 21:9 씬/세로 극단(3:4→1:3) 24종.</p>
+<div class="tip"><p><b>💡 Tip:</b> 21:9~2.39:1이 시네마틱 최적. 32:9부터 캐릭터 작아짐. 울트라와이드에서 영화적 연출 가능.</p></div>
+<div class="grid g3">
+<div class="card">
+<img src="images/ZIT_RA_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">4:3 Standard <span class="tg tg-b">1152x896</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, walking alone down a neon-lit rainy city street at night, reflections on wet pavement, atmospheric fog, dramatic moody lighting</div></div></div>
+<div class="card">
+<img src="images/ZIT_RA_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">3:2 Classic Photo <span class="tg tg-b">1216x832</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, walking alone down a neon-lit rainy city street at night, reflections on wet pavement, atmospheric fog, dramatic moody lighting</div></div></div>
+<div class="card">
+<img src="images/ZIT_RA_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">16:9 HD <span class="tg tg-b">1344x768</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, walking alone down a neon-lit rainy city street at night, reflections on wet pavement, atmospheric fog, dramatic moody lighting</div></div></div>
+<div class="card">
+<img src="images/ZIT_RA_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">1.85:1 Flat Wide <span class="tg tg-b">1408x768</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, walking alone down a neon-lit rainy city street at night, reflections on wet pavement, atmospheric fog, dramatic moody lighting</div></div></div>
+<div class="card">
+<img src="images/ZIT_RA_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">2:1 Univisium <span class="tg tg-b">1536x768</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, walking alone down a neon-lit rainy city street at night, reflections on wet pavement, atmospheric fog, dramatic moody lighting</div></div></div>
+<div class="card">
+<img src="images/ZIT_RA_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">21:9 Ultrawide <span class="tg tg-b">1568x672</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, walking alone down a neon-lit rainy city street at night, reflections on wet pavement, atmospheric fog, dramatic moody lighting</div></div></div>
+<div class="card">
+<img src="images/ZIT_RA_07_00001_.png" loading="lazy">
+<div class="info"><div class="nm">2.39:1 Anamorphic <span class="tg tg-b">1600x672</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, walking alone down a neon-lit rainy city street at night, reflections on wet pavement, atmospheric fog, dramatic moody lighting</div></div></div>
+<div class="card">
+<img src="images/ZIT_RA_08_00001_.png" loading="lazy">
+<div class="info"><div class="nm">2.76:1 Ultra Pana <span class="tg tg-b">1728x640</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, walking alone down a neon-lit rainy city street at night, reflections on wet pavement, atmospheric fog, dramatic moody lighting</div></div></div>
+<div class="card">
+<img src="images/ZIT_RA_09_00001_.png" loading="lazy">
+<div class="info"><div class="nm">32:9 Super Ultra <span class="tg tg-b">2048x576</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, walking alone down a neon-lit rainy city street at night, reflections on wet pavement, atmospheric fog, dramatic moody lighting</div></div></div>
+<div class="card">
+<img src="images/ZIT_RA_10_00001_.png" loading="lazy">
+<div class="info"><div class="nm">3:1 Panorama <span class="tg tg-b">2048x672</span></div>
+<div class="pr">Cinematic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, walking alone down a neon-lit rainy city street at night, reflections on wet pavement, atmospheric fog, dramatic moody lighting</div></div></div>
+<div class="card">
+<img src="images/ZIT_RB_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">UW Landscape Epic <span class="tg tg-b">1568x672</span></div>
+<div class="pr">Cinematic ultrawide photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing on a cliff edge overlooking a vast mountain valley at golden hour, epic scale, tiny figure against massive landscape</div></div></div>
+<div class="card">
+<img src="images/ZIT_RB_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">UW Action Chase <span class="tg tg-b">1568x672</span></div>
+<div class="pr">Cinematic ultrawide photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, running through a narrow alley being chased, motion blur, walls closing in on both sides, dramatic perspective</div></div></div>
+<div class="card">
+<img src="images/ZIT_RB_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">UW Conversation <span class="tg tg-b">1568x672</span></div>
+<div class="pr">Cinematic ultrawide photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket sitting at a diner counter, another person sitting two seats away, wide empty space between them emphasizing distance and isolation</div></div></div>
+<div class="card">
+<img src="images/ZIT_RB_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">UW Symmetry <span class="tg tg-b">1568x672</span></div>
+<div class="pr">Cinematic ultrawide photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing perfectly centered in a long symmetrical corridor, vanishing point perspective, Stanley Kubrick composition</div></div></div>
+<div class="card">
+<img src="images/ZIT_RB_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">UW Western Standoff <span class="tg tg-b">1568x672</span></div>
+<div class="pr">Cinematic ultrawide photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing in an empty dusty western town street, facing the camera in a standoff pose, tumbleweeds, extreme wide composition</div></div></div>
+<div class="card">
+<img src="images/ZIT_RB_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">UW Car Interior <span class="tg tg-b">1568x672</span></div>
+<div class="pr">Cinematic ultrawide photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, sitting in the driver seat of a car at night, dashboard lights glowing, city lights passing through windows, intimate framing</div></div></div>
+<div class="card">
+<img src="images/ZIT_RB_07_00001_.png" loading="lazy">
+<div class="info"><div class="nm">UW Battle Scene <span class="tg tg-b">1568x672</span></div>
+<div class="pr">Cinematic ultrawide photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, in the middle of a chaotic medieval battlefield, armies clashing on both sides, smoke and dust, epic war scene</div></div></div>
+<div class="card">
+<img src="images/ZIT_RB_08_00001_.png" loading="lazy">
+<div class="info"><div class="nm">UW Sci-Fi Bridge <span class="tg tg-b">1568x672</span></div>
+<div class="pr">Cinematic ultrawide photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing on the bridge of a massive spaceship, panoramic window showing a planet below, holographic displays, sci-fi command center</div></div></div>
+<div class="card">
+<img src="images/ZIT_RC_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">3:4 Standard Tall <span class="tg tg-b">896x1152</span></div>
+<div class="pr">Dramatic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing at the base of a towering gothic cathedral, looking up, dramatic vertical architecture, soaring spires</div></div></div>
+<div class="card">
+<img src="images/ZIT_RC_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">2:3 Poster <span class="tg tg-b">832x1216</span></div>
+<div class="pr">Dramatic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing at the base of a towering gothic cathedral, looking up, dramatic vertical architecture, soaring spires</div></div></div>
+<div class="card">
+<img src="images/ZIT_RC_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">9:16 Phone <span class="tg tg-b">768x1344</span></div>
+<div class="pr">Dramatic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing at the base of a towering gothic cathedral, looking up, dramatic vertical architecture, soaring spires</div></div></div>
+<div class="card">
+<img src="images/ZIT_RC_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">9:21 Ultra Tall <span class="tg tg-b">672x1568</span></div>
+<div class="pr">Dramatic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing at the base of a towering gothic cathedral, looking up, dramatic vertical architecture, soaring spires</div></div></div>
+<div class="card">
+<img src="images/ZIT_RC_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">1:2.76 Extreme <span class="tg tg-b">640x1728</span></div>
+<div class="pr">Dramatic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing at the base of a towering gothic cathedral, looking up, dramatic vertical architecture, soaring spires</div></div></div>
+<div class="card">
+<img src="images/ZIT_RC_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">1:3 Tower <span class="tg tg-b">672x2048</span></div>
+<div class="pr">Dramatic photograph of a young woman with short red hair and green eyes, wearing a dark leather jacket, standing at the base of a towering gothic cathedral, looking up, dramatic vertical architecture, soaring spires</div></div></div>
+</div></section>
+<section id="eclipsia-jrpg"><h2>⚔️ 10. Eclipsia: JRPG Style</h2>
+<p class="sd">통일 세계관 'Eclipsia' 20 클래스. 애니 하이브리드 + 상반신 + 드라마틱 배경.</p>
+<div class="tip"><p><b>💡 Tip:</b> 프리픽스: 'anime-inspired semi-realistic, JRPG character art'. 배경이 다르면 톤 차이 발생.</p></div>
+<div class="grid g4">
+<div class="card">
+<img src="images/ZIT_UW_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Holy Knight <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">High-quality fantasy character portrait in anime-inspired semi-realistic style, detailed anime face with large expressive eyes and refined features, realistic material textures on armor clothing and accessories, dramatic directional lighting with ric...</div></div></div>
+<div class="card">
+<img src="images/ZIT_UW_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Berserker <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">High-quality fantasy character portrait in anime-inspired semi-realistic style, detailed anime face with large expressive eyes and refined features, realistic material textures on armor clothing and accessories, dramatic directional lighting with ric...</div></div></div>
+<div class="card">
+<img src="images/ZIT_UW_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Dragon Knight <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">High-quality fantasy character portrait in anime-inspired semi-realistic style, detailed anime face with large expressive eyes and refined features, realistic material textures on armor clothing and accessories, dramatic directional lighting with ric...</div></div></div>
+<div class="card">
+<img src="images/ZIT_UW_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Shield Guardian <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">High-quality fantasy character portrait in anime-inspired semi-realistic style, detailed anime face with large expressive eyes and refined features, realistic material textures on armor clothing and accessories, dramatic directional lighting with ric...</div></div></div>
+<div class="card">
+<img src="images/ZIT_UW_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Archmage <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">High-quality fantasy character portrait in anime-inspired semi-realistic style, detailed anime face with large expressive eyes and refined features, realistic material textures on armor clothing and accessories, dramatic directional lighting with ric...</div></div></div>
+<div class="card">
+<img src="images/ZIT_UW_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Necromancer <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">High-quality fantasy character portrait in anime-inspired semi-realistic style, detailed anime face with large expressive eyes and refined features, realistic material textures on armor clothing and accessories, dramatic directional lighting with ric...</div></div></div>
+<div class="card">
+<img src="images/ZIT_UW_07_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Elementalist <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">High-quality fantasy character portrait in anime-inspired semi-realistic style, detailed anime face with large expressive eyes and refined features, realistic material textures on armor clothing and accessories, dramatic directional lighting with ric...</div></div></div>
+<div class="card">
+<img src="images/ZIT_UW_08_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Enchantress <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">High-quality fantasy character portrait in anime-inspired semi-realistic style, detailed anime face with large expressive eyes and refined features, realistic material textures on armor clothing and accessories, dramatic directional lighting with ric...</div></div></div>
+<div class="card">
+<img src="images/ZIT_UW_09_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Shadow Assassin <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">High-quality fantasy character portrait in anime-inspired semi-realistic style, detailed anime face with large expressive eyes and refined features, realistic material textures on armor clothing and accessories, dramatic directional lighting with ric...</div></div></div>
+<div class="card">
+<img src="images/ZIT_UW_10_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Ranger <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">High-quality fantasy character portrait in anime-inspired semi-realistic style, detailed anime face with large expressive eyes and refined features, realistic material textures on armor clothing and accessories, dramatic directional lighting with ric...</div></div></div>
+<div class="card">
+<img src="images/ZIT_UW_11_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Phantom Thief <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">High-quality fantasy character portrait in anime-inspired semi-realistic style, detailed anime face with large expressive eyes and refined features, realistic material textures on armor clothing and accessories, dramatic directional lighting with ric...</div></div></div>
+<div class="card">
+<img src="images/ZIT_UW_12_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Blade Dancer <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">High-quality fantasy character portrait in anime-inspired semi-realistic style, detailed anime face with large expressive eyes and refined features, realistic material textures on armor clothing and accessories, dramatic directional lighting with ric...</div></div></div>
+<div class="card">
+<img src="images/ZIT_UW_13_00001_.png" loading="lazy">
+<div class="info"><div class="nm">High Priestess <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">High-quality fantasy character portrait in anime-inspired semi-realistic style, detailed anime face with large expressive eyes and refined features, realistic material textures on armor clothing and accessories, dramatic directional lighting with ric...</div></div></div>
+<div class="card">
+<img src="images/ZIT_UW_14_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Bard <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">High-quality fantasy character portrait in anime-inspired semi-realistic style, detailed anime face with large expressive eyes and refined features, realistic material textures on armor clothing and accessories, dramatic directional lighting with ric...</div></div></div>
+<div class="card">
+<img src="images/ZIT_UW_15_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Alchemist <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">High-quality fantasy character portrait in anime-inspired semi-realistic style, detailed anime face with large expressive eyes and refined features, realistic material textures on armor clothing and accessories, dramatic directional lighting with ric...</div></div></div>
+<div class="card">
+<img src="images/ZIT_UW_16_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Sage Oracle <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">High-quality fantasy character portrait in anime-inspired semi-realistic style, detailed anime face with large expressive eyes and refined features, realistic material textures on armor clothing and accessories, dramatic directional lighting with ric...</div></div></div>
+<div class="card">
+<img src="images/ZIT_UW_17_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Summoner <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">High-quality fantasy character portrait in anime-inspired semi-realistic style, detailed anime face with large expressive eyes and refined features, realistic material textures on armor clothing and accessories, dramatic directional lighting with ric...</div></div></div>
+<div class="card">
+<img src="images/ZIT_UW_18_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Dark Paladin <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">High-quality fantasy character portrait in anime-inspired semi-realistic style, detailed anime face with large expressive eyes and refined features, realistic material textures on armor clothing and accessories, dramatic directional lighting with ric...</div></div></div>
+<div class="card">
+<img src="images/ZIT_UW_19_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Gunslinger <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">High-quality fantasy character portrait in anime-inspired semi-realistic style, detailed anime face with large expressive eyes and refined features, realistic material textures on armor clothing and accessories, dramatic directional lighting with ric...</div></div></div>
+<div class="card">
+<img src="images/ZIT_UW_20_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Chronomancer <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">High-quality fantasy character portrait in anime-inspired semi-realistic style, detailed anime face with large expressive eyes and refined features, realistic material textures on armor clothing and accessories, dramatic directional lighting with ric...</div></div></div>
+</div></section>
+<section id="eclipsia-concept"><h2>🎯 11. Eclipsia: Concept Art</h2>
+<p class="sd">같은 20 클래스를 컨셉아트 스타일로. 리얼 비율 + 전신 + 클린 배경. 그림체 통일도 최고!</p>
+<div class="tip"><p><b>💡 Tip:</b> 프리픽스: 'Professional character concept art, clean white background'. 배경 제거 = 통일도 핵심.</p></div>
+<div class="grid g4">
+<div class="card">
+<img src="images/ZIT_CA2_01_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Holy Knight <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Professional character concept art, full body standing pose on clean white background, realistic human proportions with slight stylization, detailed digital painting with sharp rendering, game character design sheet style, high detail on clothing mat...</div></div></div>
+<div class="card">
+<img src="images/ZIT_CA2_02_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Berserker <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Professional character concept art, full body standing pose on clean white background, realistic human proportions with slight stylization, detailed digital painting with sharp rendering, game character design sheet style, high detail on clothing mat...</div></div></div>
+<div class="card">
+<img src="images/ZIT_CA2_03_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Dragon Knight <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Professional character concept art, full body standing pose on clean white background, realistic human proportions with slight stylization, detailed digital painting with sharp rendering, game character design sheet style, high detail on clothing mat...</div></div></div>
+<div class="card">
+<img src="images/ZIT_CA2_04_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Shield Guardian <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Professional character concept art, full body standing pose on clean white background, realistic human proportions with slight stylization, detailed digital painting with sharp rendering, game character design sheet style, high detail on clothing mat...</div></div></div>
+<div class="card">
+<img src="images/ZIT_CA2_05_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Archmage <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Professional character concept art, full body standing pose on clean white background, realistic human proportions with slight stylization, detailed digital painting with sharp rendering, game character design sheet style, high detail on clothing mat...</div></div></div>
+<div class="card">
+<img src="images/ZIT_CA2_06_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Necromancer <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Professional character concept art, full body standing pose on clean white background, realistic human proportions with slight stylization, detailed digital painting with sharp rendering, game character design sheet style, high detail on clothing mat...</div></div></div>
+<div class="card">
+<img src="images/ZIT_CA2_07_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Elementalist <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Professional character concept art, full body standing pose on clean white background, realistic human proportions with slight stylization, detailed digital painting with sharp rendering, game character design sheet style, high detail on clothing mat...</div></div></div>
+<div class="card">
+<img src="images/ZIT_CA2_08_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Enchantress <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Professional character concept art, full body standing pose on clean white background, realistic human proportions with slight stylization, detailed digital painting with sharp rendering, game character design sheet style, high detail on clothing mat...</div></div></div>
+<div class="card">
+<img src="images/ZIT_CA2_09_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Shadow Assassin <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Professional character concept art, full body standing pose on clean white background, realistic human proportions with slight stylization, detailed digital painting with sharp rendering, game character design sheet style, high detail on clothing mat...</div></div></div>
+<div class="card">
+<img src="images/ZIT_CA2_10_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Ranger <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Professional character concept art, full body standing pose on clean white background, realistic human proportions with slight stylization, detailed digital painting with sharp rendering, game character design sheet style, high detail on clothing mat...</div></div></div>
+<div class="card">
+<img src="images/ZIT_CA2_11_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Phantom Thief <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Professional character concept art, full body standing pose on clean white background, realistic human proportions with slight stylization, detailed digital painting with sharp rendering, game character design sheet style, high detail on clothing mat...</div></div></div>
+<div class="card">
+<img src="images/ZIT_CA2_12_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Blade Dancer <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Professional character concept art, full body standing pose on clean white background, realistic human proportions with slight stylization, detailed digital painting with sharp rendering, game character design sheet style, high detail on clothing mat...</div></div></div>
+<div class="card">
+<img src="images/ZIT_CA2_13_00001_.png" loading="lazy">
+<div class="info"><div class="nm">High Priestess <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Professional character concept art, full body standing pose on clean white background, realistic human proportions with slight stylization, detailed digital painting with sharp rendering, game character design sheet style, high detail on clothing mat...</div></div></div>
+<div class="card">
+<img src="images/ZIT_CA2_14_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Bard <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Professional character concept art, full body standing pose on clean white background, realistic human proportions with slight stylization, detailed digital painting with sharp rendering, game character design sheet style, high detail on clothing mat...</div></div></div>
+<div class="card">
+<img src="images/ZIT_CA2_15_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Alchemist <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Professional character concept art, full body standing pose on clean white background, realistic human proportions with slight stylization, detailed digital painting with sharp rendering, game character design sheet style, high detail on clothing mat...</div></div></div>
+<div class="card">
+<img src="images/ZIT_CA2_16_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Sage Oracle <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Professional character concept art, full body standing pose on clean white background, realistic human proportions with slight stylization, detailed digital painting with sharp rendering, game character design sheet style, high detail on clothing mat...</div></div></div>
+<div class="card">
+<img src="images/ZIT_CA2_17_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Summoner <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Professional character concept art, full body standing pose on clean white background, realistic human proportions with slight stylization, detailed digital painting with sharp rendering, game character design sheet style, high detail on clothing mat...</div></div></div>
+<div class="card">
+<img src="images/ZIT_CA2_18_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Dark Paladin <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Professional character concept art, full body standing pose on clean white background, realistic human proportions with slight stylization, detailed digital painting with sharp rendering, game character design sheet style, high detail on clothing mat...</div></div></div>
+<div class="card">
+<img src="images/ZIT_CA2_19_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Gunslinger <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Professional character concept art, full body standing pose on clean white background, realistic human proportions with slight stylization, detailed digital painting with sharp rendering, game character design sheet style, high detail on clothing mat...</div></div></div>
+<div class="card">
+<img src="images/ZIT_CA2_20_00001_.png" loading="lazy">
+<div class="info"><div class="nm">Chronomancer <span class="tg tg-b">1024x1024</span></div>
+<div class="pr">Professional character concept art, full body standing pose on clean white background, realistic human proportions with slight stylization, detailed digital painting with sharp rendering, game character design sheet style, high detail on clothing mat...</div></div></div>
+</div></section>
+<section id="summary"><h2>📋 Summary & Quick Reference</h2>
+<div class="summary">
+<h3 style="color:#8ab4f8;margin-bottom:15px">ZIT Prompting Formula</h3>
+<div class="formula">[Style Prefix] of [Character ~20 words], [Expression/Pose], [Clothing], [Environment], [Lighting], [Color/Mood]
 
 Example:
-"Cinematic photograph of a young woman with short red hair and green eyes,
-determined expression, wearing cyberpunk outfit with neon circuits,
-standing on a rainy Tokyo street at night,
-blue and orange complementary lighting,
-shallow depth of field with bokeh city lights"</div>
-</div>
-
-<div class="table-wrap">
-<table>
-<tr><th>Category</th><th>Tests</th><th>Rating</th><th>Key Finding</th></tr>
-<tr><td>Art Styles</td><td>40</td><td><span class="star">★★★★★</span></td><td>12가지 스타일 모두 높은 반영도. 미디엄 퍼스트 패턴 추천</td></tr>
-<tr><td>Costumes</td><td>30</td><td><span class="star">★★★★★</span></td><td>30종 중 29종 정확. 소품/액세서리까지 잘 따라감</td></tr>
-<tr><td>Camera/DOF</td><td>32</td><td><span class="star">★★★★</span></td><td>샷 사이즈 8단계 정확. 심도는 묘사적 표현이 f값보다 효과적</td></tr>
-<tr><td>Lighting</td><td>32</td><td><span class="star">★★★★★</span></td><td>ZIT 최강 영역. 특수 조명(갓레이, 스테인드글라스) 압도적</td></tr>
-<tr><td>Expressions</td><td>32</td><td><span class="star">★★★★★</span></td><td>기본 6감정 + 미묘한 감정까지 정확. 윙크 가능!</td></tr>
-<tr><td>Poses/Action</td><td>32</td><td><span class="star">★★★★★</span></td><td>다이나믹 액션 놀라움. 손가락 제스처(하트, 피스) 정확</td></tr>
-<tr><td>Environments</td><td>32</td><td><span class="star">★★★★★</span></td><td>자연~판타지까지 모두 영화 수준. 지명 키워드 효과적</td></tr>
-<tr><td>Aspect Ratios</td><td>24</td><td><span class="star">★★★★★</span></td><td>2.39:1까지 안정적. 21:9 시네마틱 구도 최고</td></tr>
-</table>
-</div>
-
-<div class="tip-box">
-  <div class="tip-title">Top 5 Prompting Rules for ZIT</div>
-  <ul>
-    <li><strong>1. Style First</strong> — 프롬프트 맨 앞에 스타일/미디엄 배치</li>
-    <li><strong>2. Natural Language</strong> — 태그 나열 대신 자연어 문장형 사용 (Qwen3 최적화)</li>
-    <li><strong>3. Affirmative Only</strong> — 네거티브 없음. 원하는 것만 명시</li>
-    <li><strong>4. 20~30 Words Sweet Spot</strong> — 너무 짧으면 모델 기본값, 60단어+면 스타일 shift</li>
-    <li><strong>5. Environment = Automatic Context</strong> — 환경 묘사하면 조명+분위기+소품이 함께 생성</li>
-  </ul>
-</div>
-
-<footer>
-  <p>ZIT Comprehensive Prompting Guide | 254 Tests | Generated 2026-03-30</p>
-  <p>Model: z-image-turbo bf16 | Encoder: Qwen3-4B | GPU: RTX 5060 Ti 16GB</p>
-</footer>
-
-</div>
-</body>
-</html>
+"Professional character concept art, full body standing pose on clean white background,
+a young male dark paladin with short white hair and piercing crimson eyes,
+wearing corrupted black and crimson heavy armor with thorny motifs,
+wielding a massive cursed greatsword wreathed in dark purple energy"</div>
+<h3 style="color:#8ab4f8;margin:20px 0 10px">Top 5 Rules</h3>
+<ol style="padding-left:20px;color:#ccc">
+<li><b>Style First</b> — 프롬프트 맨 앞에 스타일/미디엄 배치</li>
+<li><b>Natural Language</b> — 태그 나열 대신 자연어 문장형 (Qwen3 최적화)</li>
+<li><b>Affirmative Only</b> — 네거티브 프롬프트 없음. 원하는 것만 명시</li>
+<li><b>20~30 Words Sweet Spot</b> — 너무 짧으면 모델 기본값, 60단어+면 스타일 shift</li>
+<li><b>Clean Background = Style Consistency</b> — 배경 제거하면 그림체 통일도 상승</li>
+</ol></div></section>
+<footer>ZIT Comprehensive Prompting Guide v2 | 278 Images | 2026-03-30<br>z-image-turbo bf16 | Qwen3-4B | RTX 5060 Ti 16GB</footer>
+</div></body></html>
